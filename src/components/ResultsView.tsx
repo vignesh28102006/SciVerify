@@ -525,13 +525,17 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
                   SECTION_05: DEEP LEARNING MODEL PERFORMANCE COMPARISON
                 </h3>
                 <p className="text-[10px] text-slate-500 font-mono">
-                  Standardized SciFact-Health Test Benchmark (N=8 unseen claims, multi-sentence rationales)
+                  SciFact Test Benchmark (N=8 unseen claims, data/claims_test.jsonl)
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded">
+            <div className={`flex items-center gap-2 text-[10px] font-mono px-2.5 py-1 rounded border ${
+              result.isSimulated
+                ? "text-amber-500 bg-amber-500/10 border-amber-500/20"
+                : "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+            }`}>
               <CheckCircle2 className="h-3 w-3" />
-              <span>3 MODELS EVALUATED</span>
+              <span>{result.isSimulated ? "CLIENT SIMULATION (FALLBACK)" : "LIVE NEURAL BENCHMARK"}</span>
             </div>
           </div>
 
@@ -539,21 +543,22 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
             <table className="w-full text-left font-mono text-xs border-collapse">
               <thead>
                 <tr className="border-b border-slate-200 dark:border-white/10 text-[10px] text-slate-500 uppercase tracking-wider">
-                  <th className="py-2.5 px-3">Deep Learning Model</th>
-                  <th className="py-2.5 px-3">Architecture Type</th>
+                  <th className="py-2.5 px-3">Evaluation Scope & Model</th>
+                  <th className="py-2.5 px-3">Architecture & Pipeline</th>
                   <th className="py-2.5 px-3 text-right">Accuracy</th>
                   <th className="py-2.5 px-3 text-right">Precision</th>
                   <th className="py-2.5 px-3 text-right">Recall</th>
                   <th className="py-2.5 px-3 text-right">Macro F1</th>
-                  <th className="py-2.5 px-3 text-right">Inference Latency</th>
-                  <th className="py-2.5 px-3 text-center">Status</th>
+                  <th className="py-2.5 px-3 text-right">Latency</th>
+                  <th className="py-2.5 px-3 text-center">Provenance</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-white/5">
                 {(result.modelMetrics || [
-                  { modelName: "DeBERTa-v3 (Fine-Tuned)", architecture: "Disentangled Cross-Attention", accuracy: 86.4, precision: 85.8, recall: 87.1, f1Score: 86.4, latencyMs: 142, parameters: "86M" },
-                  { modelName: "Google Gemini 1.5 Flash", architecture: "Dense Transformer (Decoder-only)", accuracy: 89.2, precision: 88.7, recall: 89.5, f1Score: 89.1, latencyMs: 380, parameters: "Cloud" },
-                  { modelName: "Groq (Whisper-v3 + Llama-3.1)", architecture: "Audio-Speech LPU Inference", accuracy: 87.5, precision: 91.7, recall: 88.9, f1Score: 88.6, latencyMs: 115, parameters: "Whisper-v3 / Llama-3.1" }
+                  { modelName: "DeBERTa-v3 (Oracle NLI)", architecture: "Disentangled Cross-Attention (Oracle Evidence)", accuracy: 100.0, precision: 100.0, recall: 100.0, f1Score: 100.0, latencyMs: 57, parameters: "86M", status: "BENCHMARKED", isSimulated: false },
+                  { modelName: "DeBERTa-v3 (End-to-End Pipeline)", architecture: "FAISS + Extractor + DeBERTa NLI", accuracy: 37.5, precision: 12.5, recall: 33.3, f1Score: 18.2, latencyMs: 76, parameters: "86M", status: "BENCHMARKED", isSimulated: false },
+                  { modelName: "Google Gemini 1.5 Flash", architecture: "Dense Transformer (Decoder-only)", accuracy: 89.2, precision: 88.7, recall: 89.5, f1Score: 89.1, latencyMs: 380, parameters: "Cloud", status: "SIMULATED / UNVERIFIED", isSimulated: true },
+                  { modelName: "Groq (Whisper-v3 + Llama-3.1)", architecture: "Audio-Speech LPU Inference", accuracy: 100.0, precision: 100.0, recall: 100.0, f1Score: 100.0, latencyMs: 184, parameters: "Whisper-v3 / Llama-3.1", status: "BENCHMARKED", isSimulated: false }
                 ]).map((m, idx) => (
                   <tr key={idx} className="hover:bg-slate-100/50 dark:hover:bg-white/5 transition-colors">
                     <td className="py-3 px-3 font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
@@ -567,8 +572,12 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
                     <td className="py-3 px-3 text-right font-extrabold text-cobalt">{m.f1Score}%</td>
                     <td className="py-3 px-3 text-right text-slate-500 text-[11px]">{m.latencyMs} ms</td>
                     <td className="py-3 px-3 text-center">
-                      <span className="inline-block text-[9px] px-2 py-0.5 rounded bg-cobalt/10 text-cobalt border border-cobalt/20">
-                        BENCHMARKED
+                      <span className={`inline-block text-[9px] px-2 py-0.5 rounded border ${
+                        m.isSimulated || m.status?.includes("SIMULATED")
+                          ? "bg-amber-500/10 text-amber-500 border-amber-500/30"
+                          : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
+                      }`}>
+                        {m.status || (m.isSimulated ? "SIMULATED / UNVERIFIED" : "BENCHMARKED")}
                       </span>
                     </td>
                   </tr>
@@ -576,6 +585,9 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
               </tbody>
             </table>
           </div>
+          <p className="mt-3 text-[10px] text-slate-400 font-mono">
+            * Note: Oracle NLI measures DeBERTa verification given gold-standard evidence premise. End-to-End Pipeline measures full autonomous retrieval (FAISS) + sentence extraction + verification. Google Gemini metrics are unverified fallback values pending Contributor 2 benchmark completion.
+          </p>
         </motion.div>
       )}
 
@@ -597,16 +609,16 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
                   SECTION_06: EXPLAINABLE AI (XAI) ATTRIBUTION MATRIX
                 </h3>
                 <p className="text-[10px] text-slate-500 font-mono">
-                  Algorithm: Integrated Gradients (Sundararajan et al.) + Rational Saliency Extraction
+                  Algorithm: {result.xai?.integration_method || "Integrated Gradients (Sundararajan et al.) + Composite Trapezoidal Rule"}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3 text-[10px] font-mono">
-              <span className="text-slate-500">
-                RATIONALE FIDELITY: <strong className="text-slate-800 dark:text-slate-200">{result.xai?.rationaleFidelity || 92.4}%</strong>
+            <div className="flex flex-wrap items-center gap-3 text-[10px] font-mono">
+              <span className="text-slate-500" title="Live claim: Ratio of target class probability retained with top-k tokens">
+                LIVE SUFFICIENCY: <strong className="text-slate-800 dark:text-slate-200">{result.xai?.rationaleFidelity ?? 0}%</strong>
               </span>
-              <span className="text-slate-500">
-                FAITHFULNESS SCORE: <strong className="text-emerald-500">{result.xai?.faithfulnessScore || 94.1}%</strong>
+              <span className="text-slate-500" title="Live claim: Percentage drop in target probability when top-k tokens are removed">
+                LIVE COMPREHENSIVENESS: <strong className="text-emerald-500">{result.xai?.faithfulnessScore ?? 0}%</strong>
               </span>
             </div>
           </div>
@@ -654,12 +666,24 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
                 Explainability Guarantee & Audit Trail
               </span>
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-sans">
-                {result.xai?.summary || "Using Integrated Gradients path integral calculation, token gradients along the straight line from uninformative embedding baselines to the input claim representations were integrated. The extracted rationale directly corroborates the assigned verdict without hallucinated features."}
+                {result.xai?.summary || "Using Integrated Gradients path integral calculation with the neutral [PAD] token baseline, token gradients were integrated via the composite trapezoidal rule. The displayed attributions reflect local token influence on the predicted class logit for this claim. Test-set averages (N=8) reflect empirical perturbation sensitivity across diverse assertions."}
               </p>
               <div className="pt-2 border-t border-slate-200 dark:border-white/5 flex flex-wrap gap-2 text-[9px] font-mono text-slate-500">
-                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">BASE: AXIOMATIC XAI</span>
-                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">PERTURBATION: VERIFIED</span>
-                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">COMPLETENESS: 99.8%</span>
+                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">
+                  STEPS: {result.xai?.steps || 50} (TRAPEZOIDAL)
+                </span>
+                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">
+                  LIVE DELTA: {result.xai?.convergence_delta !== undefined ? result.xai.convergence_delta.toFixed(4) : "MEASURED"}
+                </span>
+                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">
+                  TEST-SET AVG DELTA: 1.2957 (30.9% REL ERR)
+                </span>
+                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">
+                  TEST-SET RETENTION: 27.1%
+                </span>
+                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">
+                  TEST-SET DROP: 27.9%
+                </span>
               </div>
             </div>
           </div>
