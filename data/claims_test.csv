@@ -1,0 +1,9 @@
+id,claim,label,cited_doc_ids
+43,Urban green space exposure improves self-reported mental health outcomes.,SUPPORT,[900043]
+44,Wearable fitness trackers directly cause improved long-term weight loss outcomes in all users.,NOT ENOUGH INFO,[]
+45,Nicotine replacement therapy has no effect on smoking cessation success rates.,CONTRADICT,[900045]
+46,Prolonged sitting time is associated with increased risk of type 2 diabetes independent of exercise.,SUPPORT,[900046]
+47,Herbal supplements are equally effective as prescription antidepressants for severe depression.,NOT ENOUGH INFO,[]
+48,Early antibiotic treatment reduces mortality in sepsis patients.,SUPPORT,[900048]
+49,Noise pollution exposure has no effect on cardiovascular health.,CONTRADICT,[900049]
+50,Telemedicine consultations are equally effective as in-person visits for all medical specialties.,NOT ENOUGH INFO,[]

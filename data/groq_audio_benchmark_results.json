@@ -1,0 +1,11 @@
+{
+  "model_name": "Groq (Whisper-v3 + Llama-3.1)",
+  "modality": "Audio Speech Input (Speech-to-Claim Verification)",
+  "total_test_samples": 8,
+  "accuracy": 100.0,
+  "precision": 100.0,
+  "recall": 100.0,
+  "macro_f1": 100.0,
+  "avg_latency_ms": 604,
+  "status": "COMPLETED_PERSON_1"
+}

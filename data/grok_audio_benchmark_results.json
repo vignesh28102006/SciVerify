@@ -1,0 +1,11 @@
+{
+  "model_name": "Grok Multimodal Audio/Text",
+  "modality": "Audio Speech Input (Speech-to-Claim Verification)",
+  "total_test_samples": 8,
+  "accuracy": 87.5,
+  "precision": 91.7,
+  "recall": 88.9,
+  "macro_f1": 88.6,
+  "avg_latency_ms": 617,
+  "status": "COMPLETED_PERSON_1"
+}

@@ -1,0 +1,6 @@
+{"id": 1001, "claim": "Statin therapy reduces the risk of major cardiovascular events in adults with cardiovascular risk factors.", "evidence": {"900101": [{"sentences": [4], "label": "SUPPORT"}]}, "cited_doc_ids": [900101]}
+{"id": 1002, "claim": "Hydroxychloroquine treatment reduces mortality in hospitalized COVID-19 patients.", "evidence": {"900102": [{"sentences": [3], "label": "CONTRADICT"}]}, "cited_doc_ids": [900102]}
+{"id": 1003, "claim": "Higher coffee consumption is associated with a reduced risk of developing type 2 diabetes.", "evidence": {"900103": [{"sentences": [2], "label": "SUPPORT"}]}, "cited_doc_ids": [900103]}
+{"id": 1004, "claim": "Vitamin E supplementation reduces the risk of prostate cancer in healthy men.", "evidence": {"900104": [{"sentences": [3], "label": "CONTRADICT"}]}, "cited_doc_ids": [900104]}
+{"id": 1005, "claim": "Omega-3 fatty acid supplements prevent the onset of dementia in older adults.", "evidence": {}, "cited_doc_ids": [900105]}
+{"id": 1006, "claim": "Following a Mediterranean diet lowers the risk of major cardiovascular events in adults at high cardiovascular risk.", "evidence": {"900106": [{"sentences": [3], "label": "SUPPORT"}]}, "cited_doc_ids": [900106]}

@@ -1,0 +1,8 @@
+{"id": 43, "claim": "Urban green space exposure improves self-reported mental health outcomes.", "evidence": {"900043": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900043], "label": "SUPPORT"}
+{"id": 44, "claim": "Wearable fitness trackers directly cause improved long-term weight loss outcomes in all users.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 45, "claim": "Nicotine replacement therapy has no effect on smoking cessation success rates.", "evidence": {"900045": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900045], "label": "CONTRADICT"}
+{"id": 46, "claim": "Prolonged sitting time is associated with increased risk of type 2 diabetes independent of exercise.", "evidence": {"900046": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900046], "label": "SUPPORT"}
+{"id": 47, "claim": "Herbal supplements are equally effective as prescription antidepressants for severe depression.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 48, "claim": "Early antibiotic treatment reduces mortality in sepsis patients.", "evidence": {"900048": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900048], "label": "SUPPORT"}
+{"id": 49, "claim": "Noise pollution exposure has no effect on cardiovascular health.", "evidence": {"900049": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900049], "label": "CONTRADICT"}
+{"id": 50, "claim": "Telemedicine consultations are equally effective as in-person visits for all medical specialties.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}

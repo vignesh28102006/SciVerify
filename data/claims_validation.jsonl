@@ -1,0 +1,7 @@
+{"id": 36, "claim": "Occupational exposure to asbestos increases the risk of mesothelioma.", "evidence": {"900036": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900036], "label": "SUPPORT"}
+{"id": 37, "claim": "Daily multivitamin use extends overall life expectancy in healthy adults.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 38, "claim": "Early childhood exposure to a second language improves later executive function.", "evidence": {"900038": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900038], "label": "SUPPORT"}
+{"id": 39, "claim": "Chewing gum has no effect on reducing post-surgical ileus recovery time.", "evidence": {"900039": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900039], "label": "CONTRADICT"}
+{"id": 40, "claim": "High dietary salt intake causes hypertension in every individual regardless of genetics.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 41, "claim": "Structured exercise programs reduce fall risk in elderly populations.", "evidence": {"900041": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900041], "label": "SUPPORT"}
+{"id": 42, "claim": "Antidepressant use during pregnancy has no association with any neonatal outcomes.", "evidence": {"900042": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900042], "label": "CONTRADICT"}

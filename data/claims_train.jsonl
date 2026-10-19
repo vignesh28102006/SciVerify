@@ -1,0 +1,35 @@
+{"id": 1, "claim": "Regular aerobic exercise improves insulin sensitivity in adults with type 2 diabetes.", "evidence": {"900001": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900001], "label": "SUPPORT"}
+{"id": 2, "claim": "Handwashing with soap has no measurable effect on reducing diarrheal disease incidence.", "evidence": {"900002": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900002], "label": "CONTRADICT"}
+{"id": 3, "claim": "Intermittent fasting improves long-term cardiovascular outcomes in the general population.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 4, "claim": "Sleep deprivation impairs short-term memory consolidation.", "evidence": {"900004": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900004], "label": "SUPPORT"}
+{"id": 5, "claim": "Statin therapy has no effect on LDL cholesterol levels.", "evidence": {"900005": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900005], "label": "CONTRADICT"}
+{"id": 6, "claim": "Omega-3 fatty acid supplementation prevents the onset of Alzheimer's disease.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 7, "claim": "Mediterranean diet adherence is associated with lower risk of cardiovascular events.", "evidence": {"900007": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900007], "label": "SUPPORT"}
+{"id": 8, "claim": "Antibiotic use in early childhood has no association with later obesity risk.", "evidence": {"900008": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900008], "label": "CONTRADICT"}
+{"id": 9, "claim": "Probiotic supplementation cures major depressive disorder.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 10, "claim": "Second-hand smoke exposure increases the risk of childhood asthma.", "evidence": {"900010": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900010], "label": "SUPPORT"}
+{"id": 11, "claim": "High-dose vitamin C supplementation prevents the common cold in the general population.", "evidence": {"900011": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900011], "label": "CONTRADICT"}
+{"id": 12, "claim": "Gut microbiome composition influences response to cancer immunotherapy.", "evidence": {"900012": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900012], "label": "SUPPORT"}
+{"id": 13, "claim": "Blue light exposure from screens causes permanent retinal damage in adults.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 14, "claim": "Bariatric surgery leads to remission of type 2 diabetes in a majority of severely obese patients.", "evidence": {"900014": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900014], "label": "SUPPORT"}
+{"id": 15, "claim": "Coffee consumption has no association with reduced risk of Parkinson's disease.", "evidence": {"900015": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900015], "label": "CONTRADICT"}
+{"id": 16, "claim": "Red meat consumption directly causes colorectal cancer in all individuals.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 17, "claim": "Early mobilization after surgery reduces the incidence of postoperative pneumonia.", "evidence": {"900017": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900017], "label": "SUPPORT"}
+{"id": 18, "claim": "Breastfeeding has no effect on infant immune system development.", "evidence": {"900018": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900018], "label": "CONTRADICT"}
+{"id": 19, "claim": "Air pollution exposure during pregnancy affects fetal brain development.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 20, "claim": "Hand hygiene compliance among healthcare workers reduces hospital-acquired infection rates.", "evidence": {"900020": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900020], "label": "SUPPORT"}
+{"id": 21, "claim": "Moderate alcohol consumption has no association with increased breast cancer risk.", "evidence": {"900021": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900021], "label": "CONTRADICT"}
+{"id": 22, "claim": "Artificial sweeteners cause insulin resistance in healthy adults.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 23, "claim": "Cognitive behavioral therapy reduces symptoms of generalized anxiety disorder.", "evidence": {"900023": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900023], "label": "SUPPORT"}
+{"id": 24, "claim": "Vaccination against HPV has no effect on cervical cancer incidence.", "evidence": {"900024": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900024], "label": "CONTRADICT"}
+{"id": 25, "claim": "Meditation practice reverses age-related cognitive decline entirely.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 26, "claim": "Low physical activity levels are associated with increased risk of depression.", "evidence": {"900026": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900026], "label": "SUPPORT"}
+{"id": 27, "claim": "Fluoride in drinking water has no effect on dental caries prevalence.", "evidence": {"900027": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900027], "label": "CONTRADICT"}
+{"id": 28, "claim": "Prenatal exposure to acetaminophen causes autism spectrum disorder.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 29, "claim": "Adequate hydration improves cognitive performance during prolonged physical exertion.", "evidence": {"900029": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900029], "label": "SUPPORT"}
+{"id": 30, "claim": "Regular flu vaccination has no effect on hospitalization rates among the elderly.", "evidence": {"900030": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900030], "label": "CONTRADICT"}
+{"id": 31, "claim": "Screen time before bed has no effect on sleep quality in adolescents.", "evidence": {"900031": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900031], "label": "CONTRADICT"}
+{"id": 32, "claim": "Music therapy improves emotional wellbeing in dementia patients.", "evidence": {"900032": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900032], "label": "SUPPORT"}
+{"id": 33, "claim": "Ketogenic diets cure epilepsy in all pediatric patients.", "evidence": {}, "cited_doc_ids": [], "label": "NOT ENOUGH INFO"}
+{"id": 34, "claim": "Air filtration systems reduce indoor transmission of airborne respiratory viruses.", "evidence": {"900034": [{"sentences": [0], "label": "SUPPORT"}]}, "cited_doc_ids": [900034], "label": "SUPPORT"}
+{"id": 35, "claim": "Chronic sleep debt has no association with increased cardiovascular disease risk.", "evidence": {"900035": [{"sentences": [0], "label": "CONTRADICT"}]}, "cited_doc_ids": [900035], "label": "CONTRADICT"}
