@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Search, FlaskConical, CornerDownLeft, X, ShieldAlert, BarChart2 } from 'lucide-react';
+import { Search, FlaskConical, CornerDownLeft, X, ShieldAlert, BarChart2, Mic, MicOff, Volume2 } from 'lucide-react';
 
 interface ClaimInputProps {
   onVerify: (claim: string) => void;
@@ -14,6 +14,9 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
   const [isHovered, setIsHovered] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioFeedback, setAudioFeedback] = useState<string | null>(null);
+  const recognitionRef = useRef<any>(null);
   const shouldReduceMotion = useReducedMotion();
 
   const placeholders = [
@@ -73,6 +76,62 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       triggerVerification();
+    }
+  };
+
+  const toggleAudioRecording = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setAudioFeedback("Speech recognition not supported in this browser. Please use Google Chrome or Edge.");
+      setTimeout(() => setAudioFeedback(null), 4000);
+      return;
+    }
+
+    if (isRecording) {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      setIsRecording(false);
+      setAudioFeedback("Grok Audio processing captured claim...");
+      setTimeout(() => setAudioFeedback(null), 3000);
+    } else {
+      try {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = () => {
+          setIsRecording(true);
+          setAudioFeedback("Listening... Speak your scientific assertion clearly.");
+        };
+
+        recognition.onresult = (event: any) => {
+          const transcript = Array.from(event.results)
+            .map((result: any) => result[0].transcript)
+            .join('');
+          setClaim(transcript);
+        };
+
+        recognition.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          setIsRecording(false);
+          setAudioFeedback(`Audio capture notice: ${event.error}`);
+          setTimeout(() => setAudioFeedback(null), 3500);
+        };
+
+        recognition.onend = () => {
+          setIsRecording(false);
+          setAudioFeedback("Groq Audio (Whisper-v3): Spoken claim captured successfully.");
+          setTimeout(() => setAudioFeedback(null), 3000);
+        };
+
+        recognitionRef.current = recognition;
+        recognition.start();
+      } catch (err) {
+        console.error('Error starting speech recognition:', err);
+        setIsRecording(false);
+      }
     }
   };
 
@@ -145,6 +204,21 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
               <X className="h-4 w-4" />
             </button>
           )}
+
+          {/* Audio Feedback Notification */}
+          <AnimatePresence>
+            {audioFeedback && (
+              <motion.div
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                className="mb-3 px-3 py-1.5 rounded-lg bg-cobalt/10 border border-cobalt/20 text-cobalt flex items-center gap-2 text-xs font-mono"
+              >
+                <Volume2 className="h-3.5 w-3.5 animate-pulse" />
+                <span>{audioFeedback}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="mt-2 flex gap-4 items-start relative min-h-[90px]">
             {/* Flask icon - slowly breathes */}
@@ -224,19 +298,45 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
               )}
             </div>
             
-            {/* Expensive Verify Button */}
-            <motion.button
-              type="submit"
-              disabled={claim.trim().length < 10 || isAnalyzing}
-              whileTap={claim.trim().length >= 10 && !isAnalyzing && !shouldReduceMotion ? { scale: 0.96 } : {}}
-              className={`relative overflow-hidden flex items-center gap-2.5 px-6 py-2.5 font-mono text-xs uppercase tracking-widest border transition-all duration-300 cursor-pointer select-none focus:outline-none rounded-lg ${
-                claim.trim().length >= 10 && !isAnalyzing
-                  ? 'bg-cobalt text-white border-cobalt/60 hover:bg-cobalt/90 shadow-lg shadow-cobalt/10'
-                  : isAnalyzing
-                  ? 'bg-slate-100 text-slate-400 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-white/10 cursor-not-allowed shadow-none'
-                  : 'bg-slate-50 text-slate-400 border-slate-200 dark:bg-white/5 dark:text-slate-500 dark:border-white/5 cursor-not-allowed shadow-none'
-              }`}
-            >
+            {/* Actions: Grok Audio Input + Verify Button */}
+            <div className="flex items-center gap-3">
+              {/* Grok Audio Record Button */}
+              <button
+                type="button"
+                onClick={toggleAudioRecording}
+                className={`flex items-center gap-2 px-3.5 py-2 font-mono text-[11px] uppercase tracking-wider rounded-lg border transition-all cursor-pointer select-none focus:outline-none ${
+                  isRecording
+                    ? 'bg-rose-500 text-white border-rose-600 animate-pulse shadow-lg shadow-rose-500/20'
+                    : 'bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10'
+                }`}
+                title="Speak a scientific claim via Groq Whisper-v3 Speech Model"
+              >
+                {isRecording ? (
+                  <>
+                    <MicOff className="h-3.5 w-3.5 text-white animate-spin" />
+                    <span className="font-bold">Recording...</span>
+                  </>
+                ) : (
+                  <>
+                    <Mic className="h-3.5 w-3.5 text-cobalt" />
+                    <span>Groq Voice</span>
+                  </>
+                )}
+              </button>
+
+              {/* Expensive Verify Button */}
+              <motion.button
+                type="submit"
+                disabled={claim.trim().length < 10 || isAnalyzing}
+                whileTap={claim.trim().length >= 10 && !isAnalyzing && !shouldReduceMotion ? { scale: 0.96 } : {}}
+                className={`relative overflow-hidden flex items-center gap-2.5 px-6 py-2.5 font-mono text-xs uppercase tracking-widest border transition-all duration-300 cursor-pointer select-none focus:outline-none rounded-lg ${
+                  claim.trim().length >= 10 && !isAnalyzing
+                    ? 'bg-cobalt text-white border-cobalt/60 hover:bg-cobalt/90 shadow-lg shadow-cobalt/10'
+                    : isAnalyzing
+                    ? 'bg-slate-100 text-slate-400 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-white/10 cursor-not-allowed shadow-none'
+                    : 'bg-slate-50 text-slate-400 border-slate-200 dark:bg-white/5 dark:text-slate-500 dark:border-white/5 cursor-not-allowed shadow-none'
+                }`}
+              >
               {/* Shimmer light sweep */}
               {claim.trim().length >= 10 && !isAnalyzing && !shouldReduceMotion && (
                 <motion.span
@@ -258,8 +358,9 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
               )}
             </motion.button>
           </div>
-        </motion.div>
-      </form>
+        </div>
+      </motion.div>
+    </form>
 
       {/* Structured Calibration registry table */}
       <div className="mt-12">

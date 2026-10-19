@@ -8,7 +8,7 @@ import { HistorySidebar } from './components/HistorySidebar';
 import { TrustSection } from './components/TrustSection';
 import { SciVerifyHeroLogo } from './components/SciVerifyHeroLogo';
 import { AuthPage } from './components/AuthPage';
-import { generateVerification } from './services/mockVerification';
+import { verifyClaimOnline } from './services/api';
 import type { VerificationResult } from './services/mockVerification';
 
 type BootPhase = 
@@ -580,8 +580,8 @@ function App() {
     setIsBooting(false);
   };
 
-  const handleLoadingComplete = () => {
-    const freshResult = generateVerification(claim);
+  const handleLoadingComplete = async () => {
+    const freshResult = await verifyClaimOnline(claim);
     setResult(freshResult);
     
     setHistoryList(prev => {
