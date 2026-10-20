@@ -1,0 +1,142 @@
+[
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Regular aerobic exercise improves insulin sensitivity in adults with type 2 diabetes.\nContext: Cited in study 900001 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Handwashing with soap has no measurable effect on reducing diarrheal disease incidence.\nContext: Cited in study 900002 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Intermittent fasting improves long-term cardiovascular outcomes in the general population.\nContext: No supporting or contradicting evidence cited in the paper.",
+    "output": "{\"verdict\": \"NOT ENOUGH INFO\", \"confidence\": 75, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as NOT ENOUGH INFO.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Sleep deprivation impairs short-term memory consolidation.\nContext: Cited in study 900004 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Statin therapy has no effect on LDL cholesterol levels.\nContext: Cited in study 900005 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Omega-3 fatty acid supplementation prevents the onset of Alzheimer's disease.\nContext: No supporting or contradicting evidence cited in the paper.",
+    "output": "{\"verdict\": \"NOT ENOUGH INFO\", \"confidence\": 75, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as NOT ENOUGH INFO.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Mediterranean diet adherence is associated with lower risk of cardiovascular events.\nContext: Cited in study 900007 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Antibiotic use in early childhood has no association with later obesity risk.\nContext: Cited in study 900008 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Probiotic supplementation cures major depressive disorder.\nContext: No supporting or contradicting evidence cited in the paper.",
+    "output": "{\"verdict\": \"NOT ENOUGH INFO\", \"confidence\": 75, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as NOT ENOUGH INFO.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Second-hand smoke exposure increases the risk of childhood asthma.\nContext: Cited in study 900010 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: High-dose vitamin C supplementation prevents the common cold in the general population.\nContext: Cited in study 900011 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Gut microbiome composition influences response to cancer immunotherapy.\nContext: Cited in study 900012 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Blue light exposure from screens causes permanent retinal damage in adults.\nContext: No supporting or contradicting evidence cited in the paper.",
+    "output": "{\"verdict\": \"NOT ENOUGH INFO\", \"confidence\": 75, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as NOT ENOUGH INFO.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Bariatric surgery leads to remission of type 2 diabetes in a majority of severely obese patients.\nContext: Cited in study 900014 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Coffee consumption has no association with reduced risk of Parkinson's disease.\nContext: Cited in study 900015 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Red meat consumption directly causes colorectal cancer in all individuals.\nContext: No supporting or contradicting evidence cited in the paper.",
+    "output": "{\"verdict\": \"NOT ENOUGH INFO\", \"confidence\": 75, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as NOT ENOUGH INFO.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Early mobilization after surgery reduces the incidence of postoperative pneumonia.\nContext: Cited in study 900017 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Breastfeeding has no effect on infant immune system development.\nContext: Cited in study 900018 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Air pollution exposure during pregnancy affects fetal brain development.\nContext: No supporting or contradicting evidence cited in the paper.",
+    "output": "{\"verdict\": \"NOT ENOUGH INFO\", \"confidence\": 75, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as NOT ENOUGH INFO.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Hand hygiene compliance among healthcare workers reduces hospital-acquired infection rates.\nContext: Cited in study 900020 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Moderate alcohol consumption has no association with increased breast cancer risk.\nContext: Cited in study 900021 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Artificial sweeteners cause insulin resistance in healthy adults.\nContext: No supporting or contradicting evidence cited in the paper.",
+    "output": "{\"verdict\": \"NOT ENOUGH INFO\", \"confidence\": 75, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as NOT ENOUGH INFO.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Cognitive behavioral therapy reduces symptoms of generalized anxiety disorder.\nContext: Cited in study 900023 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Vaccination against HPV has no effect on cervical cancer incidence.\nContext: Cited in study 900024 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Meditation practice reverses age-related cognitive decline entirely.\nContext: No supporting or contradicting evidence cited in the paper.",
+    "output": "{\"verdict\": \"NOT ENOUGH INFO\", \"confidence\": 75, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as NOT ENOUGH INFO.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Low physical activity levels are associated with increased risk of depression.\nContext: Cited in study 900026 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Fluoride in drinking water has no effect on dental caries prevalence.\nContext: Cited in study 900027 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Prenatal exposure to acetaminophen causes autism spectrum disorder.\nContext: No supporting or contradicting evidence cited in the paper.",
+    "output": "{\"verdict\": \"NOT ENOUGH INFO\", \"confidence\": 75, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as NOT ENOUGH INFO.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Adequate hydration improves cognitive performance during prolonged physical exertion.\nContext: Cited in study 900029 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Regular flu vaccination has no effect on hospitalization rates among the elderly.\nContext: Cited in study 900030 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Screen time before bed has no effect on sleep quality in adolescents.\nContext: Cited in study 900031 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Music therapy improves emotional wellbeing in dementia patients.\nContext: Cited in study 900032 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Ketogenic diets cure epilepsy in all pediatric patients.\nContext: No supporting or contradicting evidence cited in the paper.",
+    "output": "{\"verdict\": \"NOT ENOUGH INFO\", \"confidence\": 75, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as NOT ENOUGH INFO.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Air filtration systems reduce indoor transmission of airborne respiratory viruses.\nContext: Cited in study 900034 with direct rationale.",
+    "output": "{\"verdict\": \"SUPPORT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as SUPPORT.\"}"
+  },
+  {
+    "text_input": "Verify this scientific claim:\nClaim: Chronic sleep debt has no association with increased cardiovascular disease risk.\nContext: Cited in study 900035 with direct rationale.",
+    "output": "{\"verdict\": \"CONTRADICT\", \"confidence\": 90, \"explanation\": \"Based on peer-reviewed study evidence, this claim is classified as CONTRADICT.\"}"
+  }
+]

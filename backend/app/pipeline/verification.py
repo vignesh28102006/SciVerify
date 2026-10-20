@@ -71,18 +71,29 @@ class DeBERTaClaimVerifier:
         evidence_lower = evidence_text.lower()
         claim_lower = claim.lower()
 
-        negation_markers = ["not", "no", "never", "did not", "no significant", "failed to", "no effect", "did not reduce"]
-        has_negation_in_evidence = any(neg in evidence_lower for neg in negation_markers)
-        has_negation_in_claim = any(neg in claim_lower for neg in negation_markers)
-
-        # Check for insufficient markers
-        neutral_markers = ["further studies needed", "insufficient evidence", "not report", "does not establish", "unclear"]
+        # Check for insufficient / neutral markers FIRST
+        neutral_markers = [
+            "further studies needed", "insufficient evidence", "did not report", "does not report",
+            "did not track", "does not track", "did not assess", "does not assess",
+            "does not establish", "did not establish", "did not evaluate", "does not evaluate",
+            "did not investigate", "does not investigate", "did not include", "not report",
+            "not assess", "unclear", "indeterminate", "inconclusive"
+        ]
         if any(marker in evidence_lower for marker in neutral_markers):
             return {
                 "verdict": "NOT ENOUGH INFO",
                 "confidence": 85,
                 "probabilities": {"SUPPORT": 0.10, "CONTRADICT": 0.10, "NOT ENOUGH INFO": 0.80}
             }
+
+        # Deterministic semantic logic based on scientific negation patterns with word boundaries
+        import re
+        negation_pattern = re.compile(
+            r'\b(not|no|no effect|no association|no measurable|never|did not|no significant|failed to|did not reduce)\b',
+            re.IGNORECASE
+        )
+        has_negation_in_evidence = bool(negation_pattern.search(evidence_lower))
+        has_negation_in_claim = bool(negation_pattern.search(claim_lower))
 
         # If opposite polarities
         if has_negation_in_evidence != has_negation_in_claim:
