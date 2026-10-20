@@ -361,14 +361,15 @@ def verify_claim(req: ClaimRequest):
             best_sentence = extracted[0]["sentence_text"] if extracted else " ".join(doc.get("abstract", [])[:2])
             primary_sentences.append(best_sentence)
 
+            doc_abstract_full = " ".join(doc.get("abstract", [])) if isinstance(doc.get("abstract"), list) else str(doc.get("abstract", ""))
+
             d_id = str(doc.get("doc_id", idx+1))
             evidence_items.append({
                 "doc_id": d_id,
                 "title": doc.get("title", ""),
-                "sentence": best_sentence
+                "sentence": doc_abstract_full if doc_abstract_full.strip() else best_sentence,
+                "highlightedSentence": best_sentence
             })
-
-            doc_abstract_full = " ".join(doc.get("abstract", [])) if isinstance(doc.get("abstract"), list) else str(doc.get("abstract", ""))
 
             claim_lower = claim.lower()
             sent_lower = best_sentence.lower()
@@ -536,12 +537,14 @@ def verify_claim(req: ClaimRequest):
     if pubmed_docs:
         logger.info(f"Retrieved {len(pubmed_docs)} external PubMed papers for claim: '{claim}'")
         for idx, doc in enumerate(pubmed_docs):
+            doc_abstract_full = " ".join(doc.get("abstract", [])) if isinstance(doc.get("abstract"), list) else str(doc.get("abstract", ""))
             best_sentence = doc["title"]
             d_id = doc["doc_id"]
             evidence_items.append({
                 "doc_id": d_id,
                 "title": doc["title"],
-                "sentence": best_sentence
+                "sentence": doc_abstract_full if doc_abstract_full.strip() else best_sentence,
+                "highlightedSentence": best_sentence
             })
             primary_sentences.append(best_sentence)
 
