@@ -3,14 +3,14 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Search, FlaskConical, CornerDownLeft, X, ShieldAlert, BarChart2, Mic, MicOff, Volume2 } from 'lucide-react';
 
 interface ClaimInputProps {
-  onVerify: (claim: string, engine?: 'groq' | 'gemini' | 'compare') => void;
+  onVerify: (claim: string, engine?: 'deberta' | 'groq' | 'gemini' | 'compare') => void;
   onFocusChange?: (focused: boolean) => void;
   currentUser?: { name: string; email: string; institution: string } | null;
 }
 
 export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange, currentUser }) => {
   const [claim, setClaim] = useState('');
-  const [selectedEngine, setSelectedEngine] = useState<'groq' | 'gemini' | 'compare'>('groq');
+  const [selectedEngine, setSelectedEngine] = useState<'deberta' | 'groq' | 'gemini' | 'compare'>('deberta');
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -163,6 +163,18 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
               <div className="inline-flex rounded-lg bg-slate-100 dark:bg-white/5 p-0.5 border border-slate-300 dark:border-white/10">
                 <button
                   type="button"
+                  onClick={() => setSelectedEngine('deberta')}
+                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all cursor-pointer flex items-center gap-1 ${
+                    selectedEngine === 'deberta'
+                      ? 'bg-indigo-600 text-white shadow-sm font-semibold'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                  title="Local Fine-Tuned Cross-Encoder: DeBERTa-v3 NLI with Integrated Gradients XAI"
+                >
+                  <span>🧪 DeBERTa-v3</span>
+                </button>
+                <button
+                  type="button"
                   onClick={() => setSelectedEngine('groq')}
                   className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all cursor-pointer flex items-center gap-1 ${
                     selectedEngine === 'groq'
@@ -171,7 +183,7 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
                   }`}
                   title="Primary Verification Engine: Groq LPU with Llama-3.1-8b-instant"
                 >
-                  <span>🚀 Groq LPU (Llama-3.1)</span>
+                  <span>🚀 Groq LPU</span>
                 </button>
                 <button
                   type="button"
@@ -183,7 +195,7 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
                   }`}
                   title="Alternative Verification Engine: Google Gemini 1.5 Flash"
                 >
-                  <span>✨ Gemini 1.5 Flash</span>
+                  <span>✨ Gemini 1.5</span>
                 </button>
                 <button
                   type="button"
@@ -337,13 +349,17 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
               <span className="hidden sm:inline-block border-l border-slate-200 dark:border-white/10 pl-3 text-slate-400">
                 ACTIVE:&nbsp;
                 <span className={
-                  selectedEngine === 'gemini' 
+                  selectedEngine === 'deberta'
+                    ? 'font-semibold text-indigo-400'
+                    : selectedEngine === 'gemini' 
                     ? 'font-semibold text-amber-500 dark:text-amber-400' 
                     : selectedEngine === 'compare'
                     ? 'font-semibold text-purple-400'
                     : 'font-semibold text-orange-500'
                 }>
-                  {selectedEngine === 'gemini' 
+                  {selectedEngine === 'deberta'
+                    ? '🧪 DeBERTa-v3 (Local NLI + Integrated Gradients)'
+                    : selectedEngine === 'gemini' 
                     ? '✨ Gemini 1.5 Flash' 
                     : selectedEngine === 'compare'
                     ? '⚖️ Dual Comparison (Groq vs Gemini)'
