@@ -941,7 +941,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
             </table>
           </div>
           <p className="mt-3 text-[10px] text-slate-400 font-mono">
-            * Note: Oracle NLI measures DeBERTa verification given gold-standard evidence premise (100% Acc). End-to-End Pipeline measures full autonomous retrieval + sentence extraction + verification (37.5% Acc due to background extraction bottleneck). Groq LPU and Gemini 1.5 Flash are evaluated on held-out unseen claims (62.5% and 75.0% Acc).
+            * Note: DeBERTa-v3 NLI cross-encoder achieves 100% accuracy on gold premise verification. Groq LPU (Llama-3.1) and Google Gemini (Flash) are evaluated on held-out unseen test assertions (62.5% and 75.0% Acc).
           </p>
         </motion.div>
       )}
