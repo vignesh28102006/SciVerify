@@ -22,6 +22,9 @@ export interface ModelPerformanceMetric {
   f1Score: number;
   latencyMs: number;
   parameters: string;
+  status?: string;
+  isSimulated?: boolean;
+  benchmarkType?: string;
 }
 
 export interface XAIFactor {
@@ -36,6 +39,13 @@ export interface XAIAnalysis {
   rationaleFidelity: number;
   faithfulnessScore: number;
   summary: string;
+  integration_method?: string;
+  convergence_delta?: number;
+  relative_completeness_error_pct?: number;
+  sufficiencyRetention?: number;
+  comprehensivenessDrop?: number;
+  predictionPreserved?: boolean;
+  steps?: number;
 }
 
 export interface VerificationResult {
@@ -47,6 +57,8 @@ export interface VerificationResult {
   timestamp: string;
   modelMetrics?: ModelPerformanceMetric[];
   xai?: XAIAnalysis;
+  isSimulated?: boolean;
+  dataSource?: 'live_neural_backend' | 'client_simulation_fallback';
 }
 
 import { DATASET_CLAIMS } from './datasetClaims';
@@ -188,6 +200,8 @@ export function generateVerification(claim: string): VerificationResult {
     return {
       ...staticRes,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      isSimulated: true,
+      dataSource: 'client_simulation_fallback',
       modelMetrics: [
         {
           modelName: "DeBERTa-v3 (Fine-Tuned)",
@@ -315,6 +329,8 @@ export function generateVerification(claim: string): VerificationResult {
         link: `https://doi.org/10.1007/s00421-023-${sum % 999}-y`
       }
     ],
+    isSimulated: true,
+    dataSource: 'client_simulation_fallback',
     modelMetrics: [
       {
         modelName: "DeBERTa-v3 (Fine-Tuned)",
