@@ -170,7 +170,6 @@ class DeBERTaClaimVerifier:
             }
 
         # Deterministic semantic logic based on scientific negation patterns with word boundaries
-        import re
         negation_pattern = re.compile(
             r'\b(not|no|no effect|no association|no measurable|never|did not|no significant|failed to|did not reduce)\b',
             re.IGNORECASE
