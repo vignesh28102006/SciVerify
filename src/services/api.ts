@@ -1,15 +1,18 @@
 import type { VerificationResult } from './mockVerification';
 import { generateVerification as fallbackVerification } from './mockVerification';
 
-const API_BASE = 'http://localhost:8001';
+// Base URL defaults to port 8001 (matching FastAPI backend), configurable via VITE_API_URL
+const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8001';
 
 /**
  * Verifies a claim by querying the SciVerify FastAPI NLP backend.
+ * Supports multi-engine routing: 'deberta' (local NLI), 'groq' (LPU Llama-3.1), or 'gemini' (Gemini 1.5/3.5).
  * Gracefully falls back to the local client-side verification engine if the backend is offline.
+ * Clearly differentiates live neural backend predictions from client simulation fallbacks.
  */
 export async function verifyClaimOnline(
   claim: string,
-  engine: string = 'groq',
+  engine: string = 'deberta',
   options?: { mode?: string; enable_external?: boolean; fallback_to_knowledge?: boolean }
 ): Promise<VerificationResult> {
   try {
@@ -43,16 +46,25 @@ export async function verifyClaimOnline(
         isProvisional: !!data.isProvisional,
         scientificReasoning: data.scientificReasoning || '',
         qualifications: data.qualifications || '',
+        isSimulated: false,
+        dataSource: 'live_neural_backend',
         modelMetrics: data.modelMetrics || fallback.modelMetrics,
         xai: data.xai || fallback.xai,
         comparison: data.comparison || fallback.comparison,
       };
+    } else {
+      console.warn(`[SciVerify API] Server responded with status ${res.status}: ${res.statusText}. Using simulation fallback.`);
     }
   } catch (err) {
-    console.info('SciVerify backend server is not active on localhost:8001. Using client-side simulation engine.');
+    console.warn(`[SciVerify Network Notice] Failed to reach backend at ${API_BASE}. Falling back to client-side simulation. Real evaluation metrics and live XAI require an active backend server on ${API_BASE}.`, err);
   }
 
-  return fallbackVerification(claim, engine);
+  const fallback = fallbackVerification(claim, engine);
+  return {
+    ...fallback,
+    isSimulated: true,
+    dataSource: 'client_simulation_fallback'
+  };
 }
 
 /**

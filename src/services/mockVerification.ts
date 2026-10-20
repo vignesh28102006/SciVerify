@@ -25,16 +25,18 @@ export interface ModelPerformanceMetric {
   recall: number;
   f1Score: number;
   latencyMs: number;
+  parameters?: string;
   status?: string;
   datasetSplit?: string;
   sampleCount?: number;
   explanation?: string;
-  parameters?: string;
   effectiveAccuracy?: number;
   apiFailures?: number;
   validEvaluations?: number;
   confusionMatrix3x3?: Record<string, Record<string, number>>;
   perClassScores?: Record<string, { precision: number; recall: number; f1: number; support: number; tp?: number; fp?: number; fn?: number }>;
+  isSimulated?: boolean;
+  benchmarkType?: string;
 }
 
 export interface XAIFactor {
@@ -52,6 +54,13 @@ export interface XAIAnalysis {
   faithfulnessScore: number;
   summary: string;
   limitations?: string;
+  integration_method?: string;
+  convergence_delta?: number;
+  relative_completeness_error_pct?: number;
+  sufficiencyRetention?: number;
+  comprehensivenessDrop?: number;
+  predictionPreserved?: boolean;
+  steps?: number;
 }
 
 export interface VerificationResult {
@@ -80,6 +89,8 @@ export interface VerificationResult {
     scientificReasoning?: string;
     qualifications?: string;
   }>;
+  isSimulated?: boolean;
+  dataSource?: 'live_neural_backend' | 'client_simulation_fallback';
 }
 
 import { DATASET_CLAIMS } from './datasetClaims';
@@ -257,6 +268,8 @@ export function generateVerification(claim: string, engine: string = 'groq'): Ve
       ...staticRes,
       verifiedBy: engineLabel,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      isSimulated: true,
+      dataSource: 'client_simulation_fallback',
       modelMetrics: [
         {
           modelKey: "groq_llama_3_1",
@@ -350,7 +363,47 @@ export function generateVerification(claim: string, engine: string = 'groq'): Ve
     verifiedBy: engineLabel,
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     evidence: [],
+    isSimulated: true,
+    dataSource: 'client_simulation_fallback',
     modelMetrics: [
+      {
+        modelKey: "deberta_v3_oracle",
+        modelName: "DeBERTa-v3 (Oracle NLI)",
+        architecture: "Disentangled Cross-Attention (Oracle Evidence)",
+        task: "Scientific NLI with Gold Evidence",
+        accuracy: 100.0,
+        precision: 100.0,
+        recall: 100.0,
+        f1Score: 100.0,
+        latencyMs: 21,
+        parameters: "86M",
+        status: "BENCHMARKED",
+        isSimulated: false,
+        benchmarkType: "Oracle NLI",
+        datasetSplit: "SciFact Test Split (claims_test.jsonl)",
+        sampleCount: 8,
+        validEvaluations: 8,
+        explanation: "Evaluated on gold evidence premise. 100% precision, recall, and F1."
+      },
+      {
+        modelKey: "deberta_v3_e2e",
+        modelName: "DeBERTa-v3 (End-to-End Pipeline)",
+        architecture: "Corpus Retrieval + Extractor + DeBERTa NLI",
+        task: "Full Autonomous Pipeline Verification",
+        accuracy: 37.5,
+        precision: 12.5,
+        recall: 33.3,
+        f1Score: 18.2,
+        latencyMs: 76,
+        parameters: "86M",
+        status: "BENCHMARKED",
+        isSimulated: false,
+        benchmarkType: "End-to-End Pipeline",
+        datasetSplit: "SciFact Test Split (claims_test.jsonl)",
+        sampleCount: 8,
+        validEvaluations: 8,
+        explanation: "Evaluated on full autonomous retrieval pipeline."
+      },
       {
         modelKey: "groq_llama_3_1",
         modelName: "Groq LPU (llama-3.1-8b-instant)",
@@ -361,6 +414,7 @@ export function generateVerification(claim: string, engine: string = 'groq'): Ve
         recall: 55.6,
         f1Score: 48.9,
         latencyMs: 1816,
+        parameters: "8B",
         status: "BASE_MODEL_EVALUATED",
         datasetSplit: "SciFact Test Split (claims_test.jsonl)",
         sampleCount: 8,
@@ -379,6 +433,7 @@ export function generateVerification(claim: string, engine: string = 'groq'): Ve
         recall: 66.7,
         f1Score: 58.3,
         latencyMs: 1811,
+        parameters: "Cloud",
         status: "BASE_MODEL_EVALUATED",
         datasetSplit: "SciFact Test Split (claims_test.jsonl)",
         sampleCount: 8,

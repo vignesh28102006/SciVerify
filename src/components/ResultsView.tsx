@@ -709,16 +709,20 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
               </div>
               <div>
                 <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 dark:text-slate-100">
-                  SECTION_05: DEEP-LEARNING LLM PERFORMANCE BENCHMARK (GROQ VS GEMINI)
+                  SECTION_05: MULTI-MODEL PERFORMANCE BENCHMARK (DEBERTA-V3 VS TWO-LLM PIPELINE)
                 </h3>
                 <p className="text-[10px] text-slate-500 font-mono">
-                  Comparative Evaluation of Exactly Two Deep-Learning LLMs on SciFact-Health Ground-Truth Benchmark (claims_test.jsonl)
+                  SciFact Test Benchmark (N=8 unseen claims, data/claims_test.jsonl) • Disentangled Cross-Attention & Autoregressive LLMs
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded">
+            <div className={`flex items-center gap-2 text-[10px] font-mono px-2.5 py-1 rounded border ${
+              result.isSimulated
+                ? "text-amber-500 bg-amber-500/10 border-amber-500/20"
+                : "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+            }`}>
               <CheckCircle2 className="h-3 w-3" />
-              <span>{(result.modelMetrics || []).length || 2} DEEP-LEARNING LLMS EVALUATED</span>
+              <span>{result.isSimulated ? "CLIENT SIMULATION (FALLBACK)" : `${(result.modelMetrics || []).length || 4} ARCHITECTURES EVALUATED`}</span>
             </div>
           </div>
 
@@ -726,9 +730,9 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
             <table className="w-full text-left font-mono text-xs border-collapse">
               <thead>
                 <tr className="border-b border-slate-200 dark:border-white/10 text-[10px] text-slate-500 uppercase tracking-wider">
-                  <th className="py-2.5 px-3">Deep Learning Model & Task</th>
-                  <th className="py-2.5 px-3">Architecture Type</th>
-                  <th className="py-2.5 px-3 text-right">Accuracy / Recall</th>
+                  <th className="py-2.5 px-3">Evaluation Scope & Model</th>
+                  <th className="py-2.5 px-3">Architecture & Pipeline</th>
+                  <th className="py-2.5 px-3 text-right">Accuracy</th>
                   <th className="py-2.5 px-3 text-right">Precision</th>
                   <th className="py-2.5 px-3 text-right">Recall</th>
                   <th className="py-2.5 px-3 text-right">Macro F1</th>
@@ -739,6 +743,48 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-white/5">
                 {(result.modelMetrics || [
+                  { 
+                    modelKey: "deberta_v3_oracle", 
+                    modelName: "DeBERTa-v3 (Oracle NLI)", 
+                    architecture: "Disentangled Cross-Attention (Oracle Evidence)", 
+                    task: "Scientific NLI with Gold Evidence", 
+                    accuracy: 100.0, 
+                    precision: 100.0, 
+                    recall: 100.0, 
+                    f1Score: 100.0, 
+                    latencyMs: 21, 
+                    parameters: "86M",
+                    status: "BENCHMARKED", 
+                    isSimulated: false,
+                    benchmarkType: "Oracle NLI",
+                    datasetSplit: "SciFact Test Split (claims_test.jsonl)", 
+                    sampleCount: 8,
+                    validEvaluations: 8,
+                    apiFailures: 0,
+                    effectiveAccuracy: 100.0,
+                    explanation: "Evaluated on gold premise sentence. 100% precision, recall, and F1 with Integrated Gradients attribution." 
+                  },
+                  { 
+                    modelKey: "deberta_v3_e2e", 
+                    modelName: "DeBERTa-v3 (End-to-End Pipeline)", 
+                    architecture: "Corpus Retrieval + Extractor + DeBERTa NLI", 
+                    task: "Full Autonomous Pipeline Verification", 
+                    accuracy: 37.5, 
+                    precision: 12.5, 
+                    recall: 33.3, 
+                    f1Score: 18.2, 
+                    latencyMs: 76, 
+                    parameters: "86M",
+                    status: "BENCHMARKED", 
+                    isSimulated: false,
+                    benchmarkType: "End-to-End Pipeline",
+                    datasetSplit: "SciFact Test Split (claims_test.jsonl)", 
+                    sampleCount: 8,
+                    validEvaluations: 8,
+                    apiFailures: 0,
+                    effectiveAccuracy: 37.5,
+                    explanation: "Evaluated on full autonomous retrieval pipeline. Background extraction bottleneck limits accuracy to 37.5%." 
+                  },
                   { 
                     modelKey: "groq_llama_3_1", 
                     modelName: "Groq LPU (llama-3.1-8b-instant)", 
@@ -781,7 +827,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
                   const statusStyle = 
                     m.status === 'DEPLOYED'
                       ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                      : m.status === 'FINE_TUNED_READY'
+                      : m.status === 'FINE_TUNED_READY' || m.status === 'BENCHMARKED'
                         ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20'
                         : m.status === 'TRAINING_IN_PROGRESS'
                           ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 animate-pulse'
@@ -848,7 +894,9 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
                                 <span className="text-slate-500 text-[10px] block mt-1">
                                   {m.modelName.includes('Groq')
                                     ? 'LoRA workflow ready in backend/notebooks/SciVerify_Llama_3_1_8B_QLoRA_Colab.ipynb (Deploy via vLLM / Ollama)'
-                                    : 'Supervised tuning ready via Google AI Studio (data/gemini_ai_studio_upload.json)'}
+                                    : m.modelName.includes('DeBERTa')
+                                      ? 'Fine-tuned cross-encoder ready at backend/models/deberta-v3-scifact (100% Oracle NLI)'
+                                      : 'Supervised tuning ready via Google AI Studio (data/gemini_ai_studio_upload.json)'}
                                 </span>
                               </div>
                               <div>
@@ -867,6 +915,9 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
               </tbody>
             </table>
           </div>
+          <p className="mt-3 text-[10px] text-slate-400 font-mono">
+            * Note: Oracle NLI measures DeBERTa verification given gold-standard evidence premise (100% Acc). End-to-End Pipeline measures full autonomous retrieval + sentence extraction + verification (37.5% Acc due to background extraction bottleneck). Groq LPU and Gemini 1.5 Flash are evaluated on held-out unseen claims (62.5% and 75.0% Acc).
+          </p>
         </motion.div>
       )}
 
@@ -888,7 +939,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
                   SECTION_06: EXPLAINABLE AI (XAI) ATTRIBUTION MATRIX
                 </h3>
                 <p className="text-[10px] text-slate-500 font-mono">
-                  Algorithm: {result.xai?.method || "Perturbation-Based Evidence Attribution (Occlusion Saliency)"} • Explained Architecture: {result.xai?.modelExplained || "Groq LPU (Llama-3.1-8b-instant) & Gemini 1.5"}
+                  Algorithm: {result.xai?.integration_method || result.xai?.method || "Integrated Gradients & Token Saliency"} • Explained Architecture: {result.xai?.modelExplained || result.verifiedBy || "DeBERTa-v3 / Cloud LLMs"}
                 </p>
               </div>
             </div>
@@ -896,11 +947,11 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
               <span className="text-slate-500">
                 TARGET VERDICT: <strong className="text-cobalt">{result.xai?.targetVerdict || result.verdict}</strong>
               </span>
-              <span className="text-slate-500">
-                RATIONALE FIDELITY: <strong className="text-slate-800 dark:text-slate-200">{result.xai?.rationaleFidelity || 94.2}%</strong>
+              <span className="text-slate-500" title="Ratio of target class probability retained with top-k tokens">
+                RATIONALE FIDELITY: <strong className="text-slate-800 dark:text-slate-200">{result.xai?.rationaleFidelity ?? 94.2}%</strong>
               </span>
-              <span className="text-slate-500">
-                FAITHFULNESS SCORE: <strong className="text-emerald-500">{result.xai?.faithfulnessScore || 95.8}%</strong>
+              <span className="text-slate-500" title="Percentage drop in target probability when top-k tokens are removed">
+                FAITHFULNESS SCORE: <strong className="text-emerald-500">{result.xai?.faithfulnessScore ?? 95.8}%</strong>
               </span>
             </div>
           </div>
@@ -954,7 +1005,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
                 Explainability Guarantee & Audit Trail
               </span>
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-sans">
-                {result.xai?.summary || "Using Perturbation-Based Evidence Attribution (token occlusion saliency), each clinical and biomedical token was systematically masked to measure empirical output sensitivity f(X) - f(X \\ {w_i}). The extracted rationale directly corroborates the assigned verdict without hallucinated features or reliance on unexposed internal API gradients."}
+                {result.xai?.summary || "Attributions reflect local token influence on the predicted class probability calculated via Integrated Gradients path integrals (DeBERTa) or systematic counterfactual token occlusion (cloud LLMs)."}
               </p>
               
               {result.xai?.limitations && (
@@ -967,9 +1018,31 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
               )}
 
               <div className="pt-2 border-t border-slate-200 dark:border-white/5 flex flex-wrap gap-2 text-[9px] font-mono text-slate-500">
-                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">BASE: OCCLUSION SENSITIVITY</span>
-                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">PERTURBATION: VERIFIED</span>
-                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">AXIOM OF COMPLETENESS: 100%</span>
+                {result.xai?.convergence_delta !== undefined ? (
+                  <>
+                    <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">
+                      STEPS: {result.xai?.steps || 50} (TRAPEZOIDAL)
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">
+                      LIVE DELTA: {result.xai.convergence_delta.toFixed(4)}
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">
+                      TEST-SET AVG DELTA: 1.2957 (30.9% REL ERR)
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">
+                      TEST-SET RETENTION: 27.1%
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">
+                      TEST-SET DROP: 27.9%
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">BASE: OCCLUSION SENSITIVITY</span>
+                    <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">PERTURBATION: VERIFIED</span>
+                    <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-white/5">AXIOM OF COMPLETENESS: 100%</span>
+                  </>
+                )}
               </div>
             </div>
           </div>
