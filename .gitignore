@@ -25,6 +25,3 @@ dist-ssr
 .env
 *.env
 __pycache__/
-backend/models/
-*.pt
-*.bin
