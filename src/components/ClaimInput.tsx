@@ -144,27 +144,28 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
       {/* Instrumentation Console Header */}
       <div className="instrument-card p-6 mb-8 border-slate-200 dark:border-white/5 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full filter blur-3xl pointer-events-none" />
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/5 pb-4 mb-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/5 pb-4 mb-4">
           <div>
-            <h2 className="font-serif text-2xl font-semibold tracking-tight text-ink">
-              {currentUser ? `Dr. ${currentUser.name}'s Workspace` : 'SciVerify Analysis Console'}
-            </h2>
+            <div className="flex items-center gap-3">
+              <h2 className="font-serif text-2xl font-semibold tracking-tight text-ink">
+                {currentUser ? `Dr. ${currentUser.name}'s Workspace` : 'SciVerify Analysis Console'}
+              </h2>
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 select-none shrink-0">
+                <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                ONLINE
+              </span>
+            </div>
             <p className="text-[10px] text-slate-500 font-mono uppercase tracking-widest mt-1">
               Natural Language Processing Evidence Retrieval & Verification
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-[10px] font-mono text-slate-400">
-            <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse" />
-              STATUS: ONLINE
-            </span>
-            <div className="flex items-center border-l border-slate-200 dark:border-white/10 pl-2 sm:pl-4 gap-1.5">
-              <span className="text-slate-500 hidden md:inline">INFERENCE ENGINE:</span>
-              <div className="inline-flex rounded-lg bg-slate-100 dark:bg-white/5 p-0.5 border border-slate-300 dark:border-white/10">
+          <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 shrink-0">
+            <span className="text-slate-500 hidden sm:inline shrink-0">INFERENCE ENGINE:</span>
+            <div className="inline-flex items-center rounded-lg bg-slate-100 dark:bg-white/5 p-0.5 border border-slate-300 dark:border-white/10 shrink-0">
                 <button
                   type="button"
                   onClick={() => setSelectedEngine('deberta')}
-                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all cursor-pointer flex items-center gap-1 ${
+                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all cursor-pointer flex items-center gap-1 shrink-0 whitespace-nowrap ${
                     selectedEngine === 'deberta'
                       ? 'bg-indigo-600 text-white shadow-sm font-semibold'
                       : 'text-slate-400 hover:text-slate-200'
@@ -176,7 +177,7 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
                 <button
                   type="button"
                   onClick={() => setSelectedEngine('groq')}
-                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all cursor-pointer flex items-center gap-1 ${
+                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all cursor-pointer flex items-center gap-1 shrink-0 whitespace-nowrap ${
                     selectedEngine === 'groq'
                       ? 'bg-orange-600 text-white shadow-sm font-semibold'
                       : 'text-slate-400 hover:text-slate-200'
@@ -188,7 +189,7 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
                 <button
                   type="button"
                   onClick={() => setSelectedEngine('gemini')}
-                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all flex items-center gap-1 cursor-pointer ${
+                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all flex items-center gap-1 cursor-pointer shrink-0 whitespace-nowrap ${
                     selectedEngine === 'gemini'
                       ? 'bg-gradient-to-r from-amber-500 to-indigo-600 text-white shadow-sm font-semibold'
                       : 'text-amber-500/80 hover:text-amber-400 font-medium'
@@ -200,19 +201,18 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
                 <button
                   type="button"
                   onClick={() => setSelectedEngine('compare')}
-                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all cursor-pointer flex items-center gap-1 ${
+                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all cursor-pointer flex items-center gap-1 shrink-0 whitespace-nowrap ${
                     selectedEngine === 'compare'
                       ? 'bg-purple-600 text-white shadow-sm font-semibold'
                       : 'text-slate-400 hover:text-purple-400'
                   }`}
-                  title="Side-by-side Dual LLM Verification: Compare Groq vs Gemini predictions"
+                  title="Tri-Model Consensus Verification: Side-by-side evaluation of DeBERTa-v3, Groq LPU, and Google Gemini"
                 >
-                  <span>⚖️ Compare Both</span>
+                  <span>⚖️ Compare Tri-Model</span>
                 </button>
               </div>
             </div>
           </div>
-        </div>
         <p className="text-xs leading-relaxed text-slate-400 font-sans max-w-2xl">
           This laboratory terminal processes plain-language biomedical assertions, retrieves peer-reviewed research papers using semantic vector search, and evaluates claim alignment. Enter an assertion below to initiate inference.
         </p>
@@ -325,13 +325,13 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
           </div>
 
           {/* Metric Status bar */}
-          <div className="mt-4 flex items-center justify-between border-t border-slate-200 dark:border-white/5 pt-4">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-y-2 gap-x-4 border-t border-slate-200 dark:border-white/5 pt-4">
             
             {/* Ticking monospace layout length counter & active engine indicator */}
-            <div className="font-mono text-[10px] text-slate-500 select-none flex items-center gap-3">
-              <div className="flex items-center">
+            <div className="font-mono text-[10px] text-slate-500 select-none flex flex-wrap items-center gap-x-3 gap-y-1 min-w-0">
+              <div className="flex items-center shrink-0 whitespace-nowrap">
                 <span>LENGTH:&nbsp;</span>
-                <span className="inline-flex overflow-hidden h-3.5 text-slate-400 font-bold">
+                <span className="inline-flex overflow-hidden h-3.5 text-slate-400 font-bold tabular-nums">
                   {countStr.split('').map((char, index) => (
                     <motion.span
                       key={`${index}-${char}`}
@@ -344,9 +344,18 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
                     </motion.span>
                   ))}
                 </span>
-                <span>/280 B</span>
+                <span className="ml-0.5 whitespace-nowrap">/280 B</span>
               </div>
-              <span className="hidden sm:inline-block border-l border-slate-200 dark:border-white/10 pl-3 text-slate-400">
+              <span 
+                className="hidden sm:inline-flex items-center border-l border-slate-200 dark:border-white/10 pl-3 text-slate-400 shrink-0 whitespace-nowrap"
+                title={
+                  selectedEngine === 'deberta'
+                    ? 'DeBERTa-v3 (Local NLI + Integrated Gradients)'
+                    : selectedEngine === 'compare'
+                    ? 'Tri-Model Consensus (DeBERTa-v3 vs Groq LPU vs Google Gemini)'
+                    : undefined
+                }
+              >
                 ACTIVE:&nbsp;
                 <span className={
                   selectedEngine === 'deberta'
@@ -358,23 +367,23 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
                     : 'font-semibold text-orange-500'
                 }>
                   {selectedEngine === 'deberta'
-                    ? '🧪 DeBERTa-v3 (Local NLI + Integrated Gradients)'
+                    ? '🧪 DeBERTa-v3 NLI'
                     : selectedEngine === 'gemini' 
                     ? '✨ Gemini 1.5 Flash' 
                     : selectedEngine === 'compare'
-                    ? '⚖️ Dual Comparison (Groq vs Gemini)'
+                    ? '⚖️ Compare Tri-Model'
                     : '🚀 Groq LPU (Llama-3.1)'}
                 </span>
               </span>
               {claim.trim().length > 0 && claim.trim().length < 10 && (
-                <span className="text-rose-400 font-medium ml-3 flex items-center gap-1.5 success-glow">
+                <span className="text-rose-400 font-medium ml-1 sm:ml-2 flex items-center gap-1.5 success-glow shrink-0 whitespace-nowrap">
                   <ShieldAlert className="h-3 w-3" /> Min 10 bytes required
                 </span>
               )}
             </div>
             
             {/* Actions: Voice Input + Verify Button */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 shrink-0">
               {/* Web Speech Audio Record Button */}
               <button
                 type="button"

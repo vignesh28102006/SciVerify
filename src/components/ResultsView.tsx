@@ -396,52 +396,75 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
             </div>
           </div>
 
-          {/* Dual LLM Comparison Drawer when in compare mode */}
+          {/* Multi-Model / Tri-Model Comparison Drawer when in compare mode */}
           {result.comparison && (
             <div className="instrument-card p-5 border-purple-500/30 bg-purple-500/[0.04] rounded-xl space-y-3 mb-6">
               <div className="flex items-center justify-between border-b border-purple-500/20 pb-2">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
-                  <span>⚖️ DUAL LLM EVALUATION COMPARISON</span>
+                  <span>{result.comparison.deberta ? '⚖️ TRI-MODEL CONSENSUS & EVALUATION' : '⚖️ DUAL LLM EVALUATION COMPARISON'}</span>
                 </span>
                 <span className="text-[9px] font-mono text-slate-500">
-                  INDEPENDENT INFERENCE
+                  {result.comparison.deberta ? 'CROSS-ARCHITECTURE VERIFICATION' : 'INDEPENDENT INFERENCE'}
                 </span>
               </div>
-              <div className="grid grid-cols-1 gap-3">
-                <div className="p-3 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/40 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] font-bold text-orange-500">
-                      🚀 Groq LPU ({result.comparison.groq.model})
-                    </span>
-                    <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded ${
-                      result.comparison.groq.verdict === 'SUPPORT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' :
-                      result.comparison.groq.verdict === 'CONTRADICT' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' :
-                      'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-                    }`}>
-                      {result.comparison.groq.verdict} [{result.comparison.groq.confidence}%]
-                    </span>
+              <div className={`grid grid-cols-1 ${result.comparison.deberta ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-3`}>
+                {result.comparison.deberta && (
+                  <div className="p-3 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/40 space-y-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-1.5">
+                      <span className="font-mono text-[10px] font-bold text-sky-500">
+                        🧪 DeBERTa-v3 ({result.comparison.deberta.model})
+                      </span>
+                      <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded shrink-0 whitespace-nowrap ${
+                        result.comparison.deberta.verdict === 'SUPPORT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' :
+                        result.comparison.deberta.verdict === 'CONTRADICT' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' :
+                        'bg-amber-500/10 text-amber-400 border border-amber-500/30'
+                      }`}>
+                        {result.comparison.deberta.verdict} [{result.comparison.deberta.confidence}%]
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans leading-relaxed">
+                      {result.comparison.deberta.explanation}
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans leading-relaxed">
-                    {result.comparison.groq.explanation}
-                  </p>
-                </div>
-                <div className="p-3 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/40 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] font-bold text-amber-500">
-                      ✨ Google Gemini ({result.comparison.gemini.model})
-                    </span>
-                    <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded ${
-                      result.comparison.gemini.verdict === 'SUPPORT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' :
-                      result.comparison.gemini.verdict === 'CONTRADICT' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' :
-                      'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-                    }`}>
-                      {result.comparison.gemini.verdict} [{result.comparison.gemini.confidence}%]
-                    </span>
+                )}
+                {result.comparison.groq && (
+                  <div className="p-3 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/40 space-y-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-1.5">
+                      <span className="font-mono text-[10px] font-bold text-orange-500">
+                        🚀 Groq LPU ({result.comparison.groq.model})
+                      </span>
+                      <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded shrink-0 whitespace-nowrap ${
+                        result.comparison.groq.verdict === 'SUPPORT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' :
+                        result.comparison.groq.verdict === 'CONTRADICT' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' :
+                        'bg-amber-500/10 text-amber-400 border border-amber-500/30'
+                      }`}>
+                        {result.comparison.groq.verdict} [{result.comparison.groq.confidence}%]
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans leading-relaxed">
+                      {result.comparison.groq.explanation}
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans leading-relaxed">
-                    {result.comparison.gemini.explanation}
-                  </p>
-                </div>
+                )}
+                {result.comparison.gemini && (
+                  <div className="p-3 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/40 space-y-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-1.5">
+                      <span className="font-mono text-[10px] font-bold text-amber-500">
+                        ✨ Google Gemini ({result.comparison.gemini.model})
+                      </span>
+                      <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded shrink-0 whitespace-nowrap ${
+                        result.comparison.gemini.verdict === 'SUPPORT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' :
+                        result.comparison.gemini.verdict === 'CONTRADICT' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' :
+                        'bg-amber-500/10 text-amber-400 border border-amber-500/30'
+                      }`}>
+                        {result.comparison.gemini.verdict} [{result.comparison.gemini.confidence}%]
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans leading-relaxed">
+                      {result.comparison.gemini.explanation}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}

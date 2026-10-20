@@ -475,11 +475,26 @@ def verify_claim(req: ClaimRequest):
                 explanation = gem_res.get("explanation") or f"[Gemini Mode] Consensus: {evidence_cards[0].highlightedSentence}"
 
         elif engine_choice == "compare":
-            verified_by = "Groq LPU vs Google Gemini (Dual Comparison)"
+            verified_by = "Tri-Model Consensus (DeBERTa-v3 vs Groq LPU vs Google Gemini)"
+            deb_res = claim_verifier.verify(claim, top_evidence)
             groq_res = groq_verifier.verify(claim, evidence_items=evidence_items, evidence_text=top_evidence)
             gem_res = gemini_verifier.verify(claim, evidence_items=evidence_items, evidence_text=top_evidence)
 
+            deb_verdict = deb_res.get("verdict") or "NOT ENOUGH INFO"
+            deb_conf = deb_res.get("confidence") or 85
+            deb_expl = f"DeBERTa-v3 cross-encoder NLI classifies premise alignment as {deb_verdict} ({deb_conf}% confidence)."
+
             comparison_data = {
+                "deberta": LLMComparisonResult(
+                    model="cross-encoder/nli-deberta-v3-small",
+                    provider="Local Hugging Face / PyTorch",
+                    verdict=deb_verdict,
+                    confidence=deb_conf,
+                    explanation=deb_expl,
+                    status="success",
+                    provenance="LOCAL_CORPUS",
+                    isProvisional=False
+                ),
                 "groq": LLMComparisonResult(
                     model="Llama-3.1-8b-instant",
                     provider="Groq Cloud LPU",
@@ -511,9 +526,9 @@ def verify_claim(req: ClaimRequest):
                 overall_confidence = gem_res.get("confidence") or 85
                 explanation = gem_res.get("explanation", "")
             else:
-                overall_verdict = evidence_cards[0].verdictContribution if evidence_cards else "NOT ENOUGH INFO"
-                overall_confidence = evidence_cards[0].confidence if evidence_cards else 75
-                explanation = "Dual comparison completed."
+                overall_verdict = deb_verdict
+                overall_confidence = deb_conf
+                explanation = "Tri-model comparison completed."
 
         else:
             verified_by = f"Groq LPU ({groq_verifier.model_name})"
@@ -544,7 +559,7 @@ def verify_claim(req: ClaimRequest):
 
         model_metrics = (
             load_comparative_model_metrics()
-            if (engine_choice == "deberta" or mode == "comparative")
+            if (engine_choice in ("deberta", "compare") or mode == "comparative")
             else [ModelMetricResponse(**m) for m in eval_registry.get_models_list_for_ui()]
         )
 
@@ -620,11 +635,26 @@ def verify_claim(req: ClaimRequest):
             explanation = gem_res.get("explanation", f"Verified against external PubMed literature ({pubmed_docs[0]['title']}).")
 
         elif engine_choice == "compare":
-            verified_by = "Groq LPU vs Google Gemini (Dual Comparison)"
+            verified_by = "Tri-Model Consensus (DeBERTa-v3 vs Groq LPU vs Google Gemini)"
+            deb_res = claim_verifier.verify(claim, top_evidence)
             groq_res = groq_verifier.verify(claim, evidence_items=evidence_items, evidence_text=top_evidence)
             gem_res = gemini_verifier.verify(claim, evidence_items=evidence_items, evidence_text=top_evidence)
 
+            deb_verdict = deb_res.get("verdict") or "SUPPORT"
+            deb_conf = deb_res.get("confidence") or 85
+            deb_expl = f"DeBERTa-v3 cross-encoder NLI classifies PubMed premise alignment as {deb_verdict} ({deb_conf}% confidence)."
+
             comparison_data = {
+                "deberta": LLMComparisonResult(
+                    model="cross-encoder/nli-deberta-v3-small",
+                    provider="Local Hugging Face / PyTorch",
+                    verdict=deb_verdict,
+                    confidence=deb_conf,
+                    explanation=deb_expl,
+                    status="success",
+                    provenance="EXTERNAL_PUBMED",
+                    isProvisional=False
+                ),
                 "groq": LLMComparisonResult(
                     model=groq_verifier.model_name,
                     provider="Groq Cloud LPU",
@@ -675,7 +705,7 @@ def verify_claim(req: ClaimRequest):
 
         model_metrics = (
             load_comparative_model_metrics()
-            if (engine_choice == "deberta" or mode == "comparative")
+            if (engine_choice in ("deberta", "compare") or mode == "comparative")
             else [ModelMetricResponse(**m) for m in eval_registry.get_models_list_for_ui()]
         )
 
@@ -800,7 +830,7 @@ def verify_claim(req: ClaimRequest):
 
         model_metrics = (
             load_comparative_model_metrics()
-            if (engine_choice == "deberta" or mode == "comparative")
+            if (engine_choice in ("deberta", "compare") or mode == "comparative")
             else [ModelMetricResponse(**m) for m in eval_registry.get_models_list_for_ui()]
         )
 

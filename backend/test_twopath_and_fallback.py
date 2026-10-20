@@ -117,8 +117,10 @@ class TestTwoPathAndFallback(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertIsNotNone(data.get("comparison"))
+        self.assertIn("deberta", data["comparison"])
         self.assertIn("groq", data["comparison"])
         self.assertIn("gemini", data["comparison"])
+        self.assertEqual(data["comparison"]["deberta"]["provider"], "Local Hugging Face / PyTorch")
         self.assertNotEqual(data["comparison"]["groq"]["provider"], data["comparison"]["gemini"]["provider"])
 
     # Case 9: Missing provider credentials handling
