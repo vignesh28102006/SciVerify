@@ -13,8 +13,11 @@ technically suited for black-box cloud LLM endpoints.
 import os
 import sys
 import logging
+import json
+import re
+import urllib.parse
 from datetime import datetime, timezone
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -166,7 +169,7 @@ class VerificationResponse(BaseModel):
     explanation: str
     evidence: List[EvidenceCard]
     timestamp: str
-    modelMetrics: Optional[List[Dict[str, Any]]] = None
+    modelMetrics: Optional[List[Union[ModelMetricResponse, Dict[str, Any]]]] = None
     xai: Optional[Any] = None
     verifiedBy: Optional[str] = "Groq LPU (Llama-3.1-8b-instant)"
     comparison: Optional[Dict[str, LLMComparisonResult]] = None
@@ -287,8 +290,19 @@ def health_check():
     }
 
 @app.get("/api/evaluation/models", response_model=List[ModelMetricResponse])
-def get_evaluation_models():
-    """Returns validated performance measures for all evaluated models (DeBERTa-v3 and LLMs) on SciFact."""
+def get_evaluation_models(scope: Optional[str] = "llm"):
+    """
+    Returns validated performance measures on SciFact.
+    scope='llm' (default) returns the two active deep-learning LLMs (Groq and Gemini).
+    scope='all' or scope='comparative' returns all benchmarked architectures including DeBERTa-v3.
+    """
+    if scope in ("all", "comparative"):
+        return [ModelMetricResponse(**m) for m in load_comparative_model_metrics()]
+    return [ModelMetricResponse(**m) for m in eval_registry.get_models_list_for_ui()]
+
+@app.get("/api/evaluation/models/comparative", response_model=List[ModelMetricResponse])
+def get_comparative_evaluation_models():
+    """Returns comparative benchmark measures across all evaluated architectures (DeBERTa-v3 and LLMs)."""
     return [ModelMetricResponse(**m) for m in load_comparative_model_metrics()]
 
 @app.get("/api/evaluation/summary")
@@ -528,7 +542,11 @@ def verify_claim(req: ClaimRequest):
                 limitations=xai_raw["limitations"]
             )
 
-        model_metrics = load_comparative_model_metrics()
+        model_metrics = (
+            load_comparative_model_metrics()
+            if (engine_choice == "deberta" or mode == "comparative")
+            else [ModelMetricResponse(**m) for m in eval_registry.get_models_list_for_ui()]
+        )
 
         return VerificationResponse(
             claim=claim,
@@ -655,7 +673,11 @@ def verify_claim(req: ClaimRequest):
                 limitations=xai_raw["limitations"]
             )
 
-        model_metrics = load_comparative_model_metrics()
+        model_metrics = (
+            load_comparative_model_metrics()
+            if (engine_choice == "deberta" or mode == "comparative")
+            else [ModelMetricResponse(**m) for m in eval_registry.get_models_list_for_ui()]
+        )
 
         return VerificationResponse(
             claim=claim,
@@ -760,7 +782,11 @@ def verify_claim(req: ClaimRequest):
             limitations=xai_raw["limitations"]
         )
 
-        model_metrics = load_comparative_model_metrics()
+        model_metrics = (
+            load_comparative_model_metrics()
+            if (engine_choice == "deberta" or mode == "comparative")
+            else [ModelMetricResponse(**m) for m in eval_registry.get_models_list_for_ui()]
+        )
 
         return VerificationResponse(
             claim=claim,
@@ -854,7 +880,11 @@ def verify_claim(req: ClaimRequest):
             limitations=xai_raw["limitations"]
         )
 
-    model_metrics = load_comparative_model_metrics()
+    model_metrics = (
+        load_comparative_model_metrics()
+        if (engine_choice == "deberta" or mode == "comparative")
+        else [ModelMetricResponse(**m) for m in eval_registry.get_models_list_for_ui()]
+    )
 
     return VerificationResponse(
         claim=claim,
