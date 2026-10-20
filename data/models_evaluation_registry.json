@@ -1,0 +1,155 @@
+{
+  "evaluation_timestamp": "2026-10-20 06:42:14 UTC",
+  "benchmark_dataset": "SciFact-Health Held-Out Test Benchmark (Unseen Claims)",
+  "sample_count": 8,
+  "models": {
+    "groq_llama_3_1": {
+      "model_key": "groq_llama_3_1",
+      "model_name": "Groq LPU (llama-3.1-8b-instant)",
+      "provider": "Groq Cloud / LPU Tensor Architecture",
+      "architecture": "Dense Autoregressive LLM (8B Parameters)",
+      "task": "Primary Scientific Claim Verification & Evidence Grounding",
+      "role": "Primary Verification Engine",
+      "status": "BASE_MODEL_EVALUATED",
+      "accuracy": 62.5,
+      "effective_accuracy": 62.5,
+      "precision": 50.0,
+      "recall": 55.6,
+      "f1_score": 48.9,
+      "macro_f1": 48.9,
+      "latency_ms": 1816,
+      "dataset_split": "SciFact Test Split (claims_test.jsonl)",
+      "samples": 8,
+      "valid_evaluations": 8,
+      "api_failures": 0,
+      "api_failure_breakdown": {},
+      "per_class": {
+        "SUPPORT": {
+          "precision": 100.0,
+          "recall": 66.7,
+          "f1": 80.0,
+          "support": 3,
+          "tp": 2,
+          "fp": 0,
+          "fn": 1
+        },
+        "CONTRADICT": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2
+        },
+        "NOT ENOUGH INFO": {
+          "precision": 50.0,
+          "recall": 100.0,
+          "f1": 66.7,
+          "support": 3,
+          "tp": 3,
+          "fp": 3,
+          "fn": 0
+        }
+      },
+      "confusion_matrix_3x3": {
+        "SUPPORT": {
+          "SUPPORT": 2,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 1
+        },
+        "CONTRADICT": {
+          "SUPPORT": 0,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 2
+        },
+        "NOT ENOUGH INFO": {
+          "SUPPORT": 0,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 3
+        }
+      },
+      "explanation": "Evaluated against held-out test split (claims_test.jsonl). API failures are strictly tracked and isolated from valid verdicts."
+    },
+    "gemini_1_5_flash": {
+      "model_key": "gemini_1_5_flash",
+      "model_name": "Google Gemini (gemini-3.5-flash-lite)",
+      "provider": "Google DeepMind / Generative AI",
+      "architecture": "Multimodal Transformer (Decoder-only)",
+      "task": "Alternative Scientific Verification & Rationale Cross-Examination",
+      "role": "Alternative Reasoning Engine",
+      "status": "BASE_MODEL_EVALUATED",
+      "accuracy": 75.0,
+      "effective_accuracy": 75.0,
+      "precision": 53.3,
+      "recall": 66.7,
+      "f1_score": 58.3,
+      "macro_f1": 58.3,
+      "latency_ms": 1811,
+      "dataset_split": "SciFact Test Split (claims_test.jsonl)",
+      "samples": 8,
+      "valid_evaluations": 8,
+      "api_failures": 0,
+      "api_failure_breakdown": {},
+      "per_class": {
+        "SUPPORT": {
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0,
+          "support": 3,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "CONTRADICT": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2
+        },
+        "NOT ENOUGH INFO": {
+          "precision": 60.0,
+          "recall": 100.0,
+          "f1": 75.0,
+          "support": 3,
+          "tp": 3,
+          "fp": 2,
+          "fn": 0
+        }
+      },
+      "confusion_matrix_3x3": {
+        "SUPPORT": {
+          "SUPPORT": 3,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 0
+        },
+        "CONTRADICT": {
+          "SUPPORT": 0,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 2
+        },
+        "NOT ENOUGH INFO": {
+          "SUPPORT": 0,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 3
+        }
+      },
+      "explanation": "Evaluated against held-out test split (claims_test.jsonl). Rate limits or timeouts are recorded as API failures, never conflated with NOT ENOUGH INFO."
+    }
+  },
+  "pipeline_summary": {
+    "active_llm_models_count": 2,
+    "primary_model": "Groq LPU (llama-3.1-8b-instant)",
+    "alternative_model": "Google Gemini (gemini-3.5-flash-lite)",
+    "macro_f1_groq": 48.9,
+    "macro_f1_gemini": 58.3,
+    "benchmark_split": "SciFact Unseen Test Set (8 Claims)",
+    "retrieval_method": "Deterministic Multi-Signal TF-IDF Vector Space",
+    "evaluation_mode": "REAL_MEASURED_PREDICTIONS",
+    "groq_api_failures": 0,
+    "gemini_api_failures": 0
+  }
+}

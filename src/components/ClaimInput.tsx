@@ -3,13 +3,14 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Search, FlaskConical, CornerDownLeft, X, ShieldAlert, BarChart2, Mic, MicOff, Volume2 } from 'lucide-react';
 
 interface ClaimInputProps {
-  onVerify: (claim: string) => void;
+  onVerify: (claim: string, engine?: 'groq' | 'gemini' | 'compare') => void;
   onFocusChange?: (focused: boolean) => void;
   currentUser?: { name: string; email: string; institution: string } | null;
 }
 
 export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange, currentUser }) => {
   const [claim, setClaim] = useState('');
+  const [selectedEngine, setSelectedEngine] = useState<'groq' | 'gemini' | 'compare'>('groq');
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -62,7 +63,7 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
       setIsAnalyzing(true);
       // Brief aesthetic delay to allow the "Analyzing..." button sweep to render
       setTimeout(() => {
-        onVerify(claim.trim());
+        onVerify(claim.trim(), selectedEngine);
       }, 1000);
     }
   };
@@ -92,7 +93,7 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
         recognitionRef.current.stop();
       }
       setIsRecording(false);
-      setAudioFeedback("Grok Audio processing captured claim...");
+      setAudioFeedback("Processing spoken assertion...");
       setTimeout(() => setAudioFeedback(null), 3000);
     } else {
       try {
@@ -122,7 +123,7 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
 
         recognition.onend = () => {
           setIsRecording(false);
-          setAudioFeedback("Groq Audio (Whisper-v3): Spoken claim captured successfully.");
+          setAudioFeedback("Browser Speech Recognition: Spoken claim captured successfully.");
           setTimeout(() => setAudioFeedback(null), 3000);
         };
 
@@ -152,12 +153,52 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
               Natural Language Processing Evidence Retrieval & Verification
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[10px] font-mono text-slate-400">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-[10px] font-mono text-slate-400">
             <span className="flex items-center gap-1.5">
               <span className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse" />
               STATUS: ONLINE
             </span>
-            <span className="border-l border-slate-200 dark:border-white/10 pl-4">MODEL: DeBERTa_v3_NLI</span>
+            <div className="flex items-center border-l border-slate-200 dark:border-white/10 pl-2 sm:pl-4 gap-1.5">
+              <span className="text-slate-500 hidden md:inline">INFERENCE ENGINE:</span>
+              <div className="inline-flex rounded-lg bg-slate-100 dark:bg-white/5 p-0.5 border border-slate-300 dark:border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setSelectedEngine('groq')}
+                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all cursor-pointer flex items-center gap-1 ${
+                    selectedEngine === 'groq'
+                      ? 'bg-orange-600 text-white shadow-sm font-semibold'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                  title="Primary Verification Engine: Groq LPU with Llama-3.1-8b-instant"
+                >
+                  <span>🚀 Groq LPU (Llama-3.1)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedEngine('gemini')}
+                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all flex items-center gap-1 cursor-pointer ${
+                    selectedEngine === 'gemini'
+                      ? 'bg-gradient-to-r from-amber-500 to-indigo-600 text-white shadow-sm font-semibold'
+                      : 'text-amber-500/80 hover:text-amber-400 font-medium'
+                  }`}
+                  title="Alternative Verification Engine: Google Gemini 1.5 Flash"
+                >
+                  <span>✨ Gemini 1.5 Flash</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedEngine('compare')}
+                  className={`px-2.5 py-1 rounded text-[10px] font-mono transition-all cursor-pointer flex items-center gap-1 ${
+                    selectedEngine === 'compare'
+                      ? 'bg-purple-600 text-white shadow-sm font-semibold'
+                      : 'text-slate-400 hover:text-purple-400'
+                  }`}
+                  title="Side-by-side Dual LLM Verification: Compare Groq vs Gemini predictions"
+                >
+                  <span>⚖️ Compare Both</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <p className="text-xs leading-relaxed text-slate-400 font-sans max-w-2xl">
@@ -274,23 +315,41 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
           {/* Metric Status bar */}
           <div className="mt-4 flex items-center justify-between border-t border-slate-200 dark:border-white/5 pt-4">
             
-            {/* Ticking monospace layout length counter */}
-            <div className="font-mono text-[10px] text-slate-500 select-none flex items-center">
-              <span>LENGTH:&nbsp;</span>
-              <span className="inline-flex overflow-hidden h-3.5 text-slate-400 font-bold">
-                {countStr.split('').map((char, index) => (
-                  <motion.span
-                    key={`${index}-${char}`}
-                    initial={shouldReduceMotion ? {} : { y: -10, opacity: 0 }}
-                    animate={shouldReduceMotion ? {} : { y: 0, opacity: 1 }}
-                    transition={{ duration: 0.16, ease: "easeOut" }}
-                    className="inline-block"
-                  >
-                    {char}
-                  </motion.span>
-                ))}
+            {/* Ticking monospace layout length counter & active engine indicator */}
+            <div className="font-mono text-[10px] text-slate-500 select-none flex items-center gap-3">
+              <div className="flex items-center">
+                <span>LENGTH:&nbsp;</span>
+                <span className="inline-flex overflow-hidden h-3.5 text-slate-400 font-bold">
+                  {countStr.split('').map((char, index) => (
+                    <motion.span
+                      key={`${index}-${char}`}
+                      initial={shouldReduceMotion ? {} : { y: -10, opacity: 0 }}
+                      animate={shouldReduceMotion ? {} : { y: 0, opacity: 1 }}
+                      transition={{ duration: 0.16, ease: "easeOut" }}
+                      className="inline-block"
+                    >
+                      {char}
+                    </motion.span>
+                  ))}
+                </span>
+                <span>/280 B</span>
+              </div>
+              <span className="hidden sm:inline-block border-l border-slate-200 dark:border-white/10 pl-3 text-slate-400">
+                ACTIVE:&nbsp;
+                <span className={
+                  selectedEngine === 'gemini' 
+                    ? 'font-semibold text-amber-500 dark:text-amber-400' 
+                    : selectedEngine === 'compare'
+                    ? 'font-semibold text-purple-400'
+                    : 'font-semibold text-orange-500'
+                }>
+                  {selectedEngine === 'gemini' 
+                    ? '✨ Gemini 1.5 Flash' 
+                    : selectedEngine === 'compare'
+                    ? '⚖️ Dual Comparison (Groq vs Gemini)'
+                    : '🚀 Groq LPU (Llama-3.1)'}
+                </span>
               </span>
-              <span>/280 B</span>
               {claim.trim().length > 0 && claim.trim().length < 10 && (
                 <span className="text-rose-400 font-medium ml-3 flex items-center gap-1.5 success-glow">
                   <ShieldAlert className="h-3 w-3" /> Min 10 bytes required
@@ -298,9 +357,9 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
               )}
             </div>
             
-            {/* Actions: Grok Audio Input + Verify Button */}
+            {/* Actions: Voice Input + Verify Button */}
             <div className="flex items-center gap-3">
-              {/* Grok Audio Record Button */}
+              {/* Web Speech Audio Record Button */}
               <button
                 type="button"
                 onClick={toggleAudioRecording}
@@ -309,7 +368,7 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
                     ? 'bg-rose-500 text-white border-rose-600 animate-pulse shadow-lg shadow-rose-500/20'
                     : 'bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10'
                 }`}
-                title="Speak a scientific claim via Groq Whisper-v3 Speech Model"
+                title="Speak a scientific claim via browser-native Speech Recognition (Web Speech API)"
               >
                 {isRecording ? (
                   <>
@@ -319,7 +378,7 @@ export const ClaimInput: React.FC<ClaimInputProps> = ({ onVerify, onFocusChange,
                 ) : (
                   <>
                     <Mic className="h-3.5 w-3.5 text-cobalt" />
-                    <span>Groq Voice</span>
+                    <span>Voice Dictation</span>
                   </>
                 )}
               </button>

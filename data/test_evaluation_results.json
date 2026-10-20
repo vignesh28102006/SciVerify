@@ -1,0 +1,291 @@
+{
+  "timestamp": "2026-10-20 06:42:14 UTC",
+  "dataset_split": "data/claims_test.jsonl",
+  "samples": 8,
+  "evaluations": {
+    "groq": {
+      "provider": "Groq Cloud LPU",
+      "model": "llama-3.1-8b-instant",
+      "sample_count": 8,
+      "valid_evaluations": 8,
+      "api_failures": 0,
+      "api_failure_breakdown": {},
+      "accuracy": 62.5,
+      "effective_accuracy": 62.5,
+      "precision": 50.0,
+      "recall": 55.6,
+      "f1": 48.9,
+      "per_class": {
+        "SUPPORT": {
+          "precision": 100.0,
+          "recall": 66.7,
+          "f1": 80.0,
+          "support": 3,
+          "tp": 2,
+          "fp": 0,
+          "fn": 1
+        },
+        "CONTRADICT": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2
+        },
+        "NOT ENOUGH INFO": {
+          "precision": 50.0,
+          "recall": 100.0,
+          "f1": 66.7,
+          "support": 3,
+          "tp": 3,
+          "fp": 3,
+          "fn": 0
+        }
+      },
+      "confusion_matrix": {
+        "SUPPORT": {
+          "SUPPORT": 2,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 1
+        },
+        "CONTRADICT": {
+          "SUPPORT": 0,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 2
+        },
+        "NOT ENOUGH INFO": {
+          "SUPPORT": 0,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 3
+        }
+      },
+      "avg_latency_ms": 1816,
+      "details": [
+        {
+          "id": 43,
+          "claim": "Urban green space exposure improves self-reported mental health outcomes.",
+          "ground_truth": "SUPPORT",
+          "predicted": "SUPPORT",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 1852
+        },
+        {
+          "id": 44,
+          "claim": "Wearable fitness trackers directly cause improved long-term weight loss outcomes in all users.",
+          "ground_truth": "NOT ENOUGH INFO",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 1779
+        },
+        {
+          "id": 45,
+          "claim": "Nicotine replacement therapy has no effect on smoking cessation success rates.",
+          "ground_truth": "CONTRADICT",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": false,
+          "latency_ms": 2183
+        },
+        {
+          "id": 46,
+          "claim": "Prolonged sitting time is associated with increased risk of type 2 diabetes independent of exercise.",
+          "ground_truth": "SUPPORT",
+          "predicted": "SUPPORT",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 2128
+        },
+        {
+          "id": 47,
+          "claim": "Herbal supplements are equally effective as prescription antidepressants for severe depression.",
+          "ground_truth": "NOT ENOUGH INFO",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 1510
+        },
+        {
+          "id": 48,
+          "claim": "Early antibiotic treatment reduces mortality in sepsis patients.",
+          "ground_truth": "SUPPORT",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": false,
+          "latency_ms": 1863
+        },
+        {
+          "id": 49,
+          "claim": "Noise pollution exposure has no effect on cardiovascular health.",
+          "ground_truth": "CONTRADICT",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": false,
+          "latency_ms": 1490
+        },
+        {
+          "id": 50,
+          "claim": "Telemedicine consultations are equally effective as in-person visits for all medical specialties.",
+          "ground_truth": "NOT ENOUGH INFO",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 1721
+        }
+      ]
+    },
+    "gemini": {
+      "provider": "Google Gemini",
+      "model": "gemini-3.5-flash-lite",
+      "sample_count": 8,
+      "valid_evaluations": 8,
+      "api_failures": 0,
+      "api_failure_breakdown": {},
+      "accuracy": 75.0,
+      "effective_accuracy": 75.0,
+      "precision": 53.3,
+      "recall": 66.7,
+      "f1": 58.3,
+      "per_class": {
+        "SUPPORT": {
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0,
+          "support": 3,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "CONTRADICT": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2
+        },
+        "NOT ENOUGH INFO": {
+          "precision": 60.0,
+          "recall": 100.0,
+          "f1": 75.0,
+          "support": 3,
+          "tp": 3,
+          "fp": 2,
+          "fn": 0
+        }
+      },
+      "confusion_matrix": {
+        "SUPPORT": {
+          "SUPPORT": 3,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 0
+        },
+        "CONTRADICT": {
+          "SUPPORT": 0,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 2
+        },
+        "NOT ENOUGH INFO": {
+          "SUPPORT": 0,
+          "CONTRADICT": 0,
+          "NOT ENOUGH INFO": 3
+        }
+      },
+      "avg_latency_ms": 1811,
+      "details": [
+        {
+          "id": 43,
+          "claim": "Urban green space exposure improves self-reported mental health outcomes.",
+          "ground_truth": "SUPPORT",
+          "predicted": "SUPPORT",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 2331
+        },
+        {
+          "id": 44,
+          "claim": "Wearable fitness trackers directly cause improved long-term weight loss outcomes in all users.",
+          "ground_truth": "NOT ENOUGH INFO",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 2204
+        },
+        {
+          "id": 45,
+          "claim": "Nicotine replacement therapy has no effect on smoking cessation success rates.",
+          "ground_truth": "CONTRADICT",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": false,
+          "latency_ms": 1711
+        },
+        {
+          "id": 46,
+          "claim": "Prolonged sitting time is associated with increased risk of type 2 diabetes independent of exercise.",
+          "ground_truth": "SUPPORT",
+          "predicted": "SUPPORT",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 1456
+        },
+        {
+          "id": 47,
+          "claim": "Herbal supplements are equally effective as prescription antidepressants for severe depression.",
+          "ground_truth": "NOT ENOUGH INFO",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 1652
+        },
+        {
+          "id": 48,
+          "claim": "Early antibiotic treatment reduces mortality in sepsis patients.",
+          "ground_truth": "SUPPORT",
+          "predicted": "SUPPORT",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 1878
+        },
+        {
+          "id": 49,
+          "claim": "Noise pollution exposure has no effect on cardiovascular health.",
+          "ground_truth": "CONTRADICT",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": false,
+          "latency_ms": 1567
+        },
+        {
+          "id": 50,
+          "claim": "Telemedicine consultations are equally effective as in-person visits for all medical specialties.",
+          "ground_truth": "NOT ENOUGH INFO",
+          "predicted": "NOT ENOUGH INFO",
+          "is_api_failure": false,
+          "error_type": null,
+          "match": true,
+          "latency_ms": 1692
+        }
+      ]
+    }
+  }
+}

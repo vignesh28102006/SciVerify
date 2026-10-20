@@ -474,6 +474,7 @@ function App() {
     return !booted;
   });
   const [claim, setClaim] = useState('');
+  const [selectedEngine, setSelectedEngine] = useState<'groq' | 'gemini' | 'compare'>('groq');
   const [result, setResult] = useState<VerificationResult | null>(null);
   const [historyList, setHistoryList] = useState<VerificationResult[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -574,14 +575,15 @@ function App() {
     }
   }, []);
 
-  const handleVerify = (newClaim: string) => {
+  const handleVerify = (newClaim: string, engine: 'groq' | 'gemini' | 'compare' = 'groq') => {
     setClaim(newClaim);
+    setSelectedEngine(engine);
     setBootPhase('READY');
     setIsBooting(false);
   };
 
   const handleLoadingComplete = async () => {
-    const freshResult = await verifyClaimOnline(claim);
+    const freshResult = await verifyClaimOnline(claim, selectedEngine);
     setResult(freshResult);
     
     setHistoryList(prev => {
