@@ -10,6 +10,18 @@ import logging
 import requests
 from typing import Dict, Any, List, Optional
 
+try:
+    from dotenv import load_dotenv
+    curr = os.path.dirname(os.path.abspath(__file__))
+    for _ in range(3):
+        env_candidate = os.path.join(curr, '.env')
+        if os.path.exists(env_candidate):
+            load_dotenv(env_candidate, override=True)
+            break
+        curr = os.path.dirname(curr)
+except ImportError:
+    pass
+
 logger = logging.getLogger("sciverify.gemini")
 
 SYSTEM_INSTRUCTION = """You are SciVerify AI, an expert biomedical scientific claim verification system powered by Google Gemini.
@@ -202,7 +214,7 @@ SCIENTIFIC CLAIM TO VERIFY:
                             "temperature": 0.05
                         }
                     }
-                    resp = requests.post(url, headers=headers, json=body, timeout=12)
+                    resp = requests.post(url, headers=headers, json=body, timeout=25)
                     if resp.status_code == 200:
                         result_json = resp.json()
                         text = result_json["candidates"][0]["content"]["parts"][0]["text"]
@@ -249,7 +261,7 @@ SCIENTIFIC CLAIM TO VERIFY:
         if not self.api_key or "your_" in self.api_key or "AIzaSy..." in self.api_key:
             return {
                 "verdict": "NOT ENOUGH INFO",
-                "confidence": 55,
+                "confidence": 0,
                 "is_provisional": True,
                 "evidence_ids": [],
                 "explanation": "Gemini API key is not configured in backend/.env.",
@@ -257,6 +269,7 @@ SCIENTIFIC CLAIM TO VERIFY:
                 "qualifications": "Configure GEMINI_API_KEY in backend/.env to activate live knowledge evaluation.",
                 "model": self.model_name,
                 "status": "missing_api_key",
+                "error_type": "MISSING_API_KEY",
                 "provenance": "MODEL_KNOWLEDGE"
             }
 
@@ -313,7 +326,7 @@ SCIENTIFIC CLAIM TO VERIFY:
                             "temperature": 0.1
                         }
                     }
-                    resp = requests.post(url, headers=headers, json=body, timeout=12)
+                    resp = requests.post(url, headers=headers, json=body, timeout=25)
                     if resp.status_code == 200:
                         result_json = resp.json()
                         text = result_json["candidates"][0]["content"]["parts"][0]["text"]
@@ -360,7 +373,7 @@ SCIENTIFIC CLAIM TO VERIFY:
 
         # Return explicit API failure if network times out or fails
         return {
-            "verdict": None,
+            "verdict": "NOT ENOUGH INFO",
             "confidence": 0,
             "is_provisional": True,
             "evidence_ids": [],

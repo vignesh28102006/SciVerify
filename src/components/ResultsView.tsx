@@ -362,7 +362,9 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
               
               <div className="mt-2 text-center select-none">
                 <span className="font-mono text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest telemetry-glow">
-                  {result.isProvisional ? 'ESTIMATED CONFIDENCE (PROVISIONAL):' : 'CONFIDENCE:'} [{countingPercent}.0%]
+                  {result.isProvisional 
+                    ? (result.confidence === 0 ? 'ESTIMATED CONFIDENCE (UNCALIBRATED):' : 'ESTIMATED CONFIDENCE (PROVISIONAL):') 
+                    : 'CONFIDENCE:'} [{countingPercent}.0%]
                 </span>
               </div>
             </div>
@@ -389,7 +391,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
             </div>
 
             <div className="w-full mt-4 border-t border-slate-200 dark:border-white/5 pt-4 flex justify-between text-[9px] font-mono text-slate-500">
-              <span>SYSTEM: STABLE</span>
+              <span>{result.confidence === 0 ? 'SYSTEM: UNCALIBRATED / OFFLINE' : 'SYSTEM: STABLE'}</span>
               <span>CAL_COV_SIM: LOCKED</span>
             </div>
           </div>

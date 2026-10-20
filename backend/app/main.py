@@ -32,7 +32,7 @@ sys.path.insert(0, parent_dir)
 
 try:
     from dotenv import load_dotenv
-    load_dotenv(os.path.join(parent_dir, '.env'))
+    load_dotenv(os.path.join(parent_dir, '.env'), override=True)
 except ImportError:
     pass
 
@@ -697,11 +697,24 @@ def verify_claim(req: ClaimRequest):
     # Step B2: LLM Knowledge Assessment Fallback (when local corpus and PubMed have no direct trials)
     if req.fallback_to_knowledge or mode in ("model_knowledge", "auto"):
         logger.info(f"Executing LLM Knowledge Assessment fallback for claim: '{claim}'")
+
+        def _extract_assessment_confidence(assess: Optional[Dict[str, Any]]) -> int:
+            """Extracts confidence from a model knowledge assessment, returning 0 if unconfigured or failed."""
+            if not assess or assess.get("status") != "success":
+                return 0
+            raw = assess.get("confidence")
+            if raw is None:
+                return 0
+            try:
+                return max(0, min(100, int(raw)))
+            except (ValueError, TypeError):
+                return 0
+
         if engine_choice == "deberta":
             verified_by = "Groq LPU (Llama-3.1-8b-instant) [DeBERTa NLI requires textual premise]"
             assessment = groq_verifier.assess_model_knowledge(claim)
             overall_verdict = assessment.get("verdict") or "NOT ENOUGH INFO"
-            overall_confidence = assessment.get("confidence") or 75
+            overall_confidence = _extract_assessment_confidence(assessment)
             explanation = (
                 f"[DeBERTa-v3 Note: Discriminative NLI models require textual evidence premise. "
                 f"Falling back to Parametric Knowledge Assessment via Llama-3.1]: "
@@ -715,7 +728,7 @@ def verify_claim(req: ClaimRequest):
             verified_by = f"Google Gemini ({gemini_verifier.model_name})"
             assessment = gemini_verifier.assess_model_knowledge(claim)
             overall_verdict = assessment.get("verdict") or "NOT ENOUGH INFO"
-            overall_confidence = assessment.get("confidence") or 75
+            overall_confidence = _extract_assessment_confidence(assessment)
             explanation = assessment.get("explanation") or ""
             scientific_reasoning = assessment.get("scientific_reasoning") or ""
             qualifications = assessment.get("qualifications") or ""
@@ -726,12 +739,15 @@ def verify_claim(req: ClaimRequest):
             groq_assess = groq_verifier.assess_model_knowledge(claim)
             gem_assess = gemini_verifier.assess_model_knowledge(claim)
 
+            groq_conf = _extract_assessment_confidence(groq_assess)
+            gem_conf = _extract_assessment_confidence(gem_assess)
+
             comparison_data = {
                 "groq": LLMComparisonResult(
                     model=groq_verifier.model_name,
                     provider="Groq Cloud LPU",
                     verdict=groq_assess.get("verdict") or "NOT ENOUGH INFO",
-                    confidence=groq_assess.get("confidence") or 75,
+                    confidence=groq_conf,
                     explanation=groq_assess.get("explanation") or "",
                     status=groq_assess.get("status", "success"),
                     provenance="MODEL_KNOWLEDGE",
@@ -743,7 +759,7 @@ def verify_claim(req: ClaimRequest):
                     model=gemini_verifier.model_name,
                     provider="Google DeepMind",
                     verdict=gem_assess.get("verdict") or "NOT ENOUGH INFO",
-                    confidence=gem_assess.get("confidence") or 75,
+                    confidence=gem_conf,
                     explanation=gem_assess.get("explanation") or "",
                     status=gem_assess.get("status", "success"),
                     provenance="MODEL_KNOWLEDGE",
@@ -755,7 +771,7 @@ def verify_claim(req: ClaimRequest):
 
             primary_assess = groq_assess if groq_assess.get("status") == "success" else gem_assess
             overall_verdict = primary_assess.get("verdict") or "NOT ENOUGH INFO"
-            overall_confidence = primary_assess.get("confidence") or 75
+            overall_confidence = _extract_assessment_confidence(primary_assess)
             explanation = primary_assess.get("explanation") or ""
             scientific_reasoning = primary_assess.get("scientific_reasoning") or ""
             qualifications = primary_assess.get("qualifications") or ""
@@ -764,7 +780,7 @@ def verify_claim(req: ClaimRequest):
             verified_by = f"Groq LPU ({groq_verifier.model_name})"
             assessment = groq_verifier.assess_model_knowledge(claim)
             overall_verdict = assessment.get("verdict") or "NOT ENOUGH INFO"
-            overall_confidence = assessment.get("confidence") or 75
+            overall_confidence = _extract_assessment_confidence(assessment)
             explanation = assessment.get("explanation") or ""
             scientific_reasoning = assessment.get("scientific_reasoning") or ""
             qualifications = assessment.get("qualifications") or ""

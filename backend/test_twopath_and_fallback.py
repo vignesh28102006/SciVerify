@@ -128,6 +128,7 @@ class TestTwoPathAndFallback(unittest.TestCase):
         res = unauthed_verifier.assess_model_knowledge("Test assertion")
         self.assertEqual(res["status"], "missing_api_key")
         self.assertEqual(res["verdict"], "NOT ENOUGH INFO")
+        self.assertEqual(res["confidence"], 0)
         self.assertTrue(res["is_provisional"])
 
     # Case 10: Malformed LLM response resilience
@@ -160,6 +161,28 @@ class TestTwoPathAndFallback(unittest.TestCase):
         self.assertFalse(groq_info["training_job_executed"])
         self.assertEqual(gemini_info["status"], "TRAINING_DATA_PREPARED")
         self.assertFalse(gemini_info["training_job_submitted"])
+
+    # Case 13: Unindexed claim with missing credentials returns zero confidence (never 75%)
+    def test_13_unindexed_claim_missing_credentials_zero_confidence(self):
+        from app.main import groq_verifier
+        orig_key = groq_verifier.api_key
+        try:
+            groq_verifier.api_key = None
+            resp = self.client.post("/api/verify", json={
+                "claim": "Vitamin C reduces pimples",
+                "engine": "groq",
+                "mode": "auto",
+                "enable_external": False,
+                "fallback_to_knowledge": True
+            })
+            self.assertEqual(resp.status_code, 200)
+            data = resp.json()
+            self.assertEqual(data["verdict"], "NOT ENOUGH INFO")
+            self.assertEqual(data["confidence"], 0, "Confidence must be 0 when unconfigured credentials prevent LLM evaluation")
+            self.assertTrue(data["isProvisional"])
+            self.assertEqual(data["evidence"], [])
+        finally:
+            groq_verifier.api_key = orig_key
 
 
 if __name__ == "__main__":

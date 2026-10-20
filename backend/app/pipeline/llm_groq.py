@@ -15,7 +15,7 @@ try:
     for _ in range(3):
         env_candidate = os.path.join(curr, '.env')
         if os.path.exists(env_candidate):
-            load_dotenv(env_candidate)
+            load_dotenv(env_candidate, override=True)
             break
         curr = os.path.dirname(curr)
 except ImportError:
@@ -242,7 +242,7 @@ class GroqClaimVerifier:
         """
         if not self.api_key or "your_" in self.api_key:
             return {
-                "verdict": None,
+                "verdict": "NOT ENOUGH INFO",
                 "confidence": 0,
                 "is_provisional": True,
                 "evidence_ids": [],
@@ -343,7 +343,7 @@ class GroqClaimVerifier:
 
         # Return explicit API failure if cloud API call fails
         return {
-            "verdict": None,
+            "verdict": "NOT ENOUGH INFO",
             "confidence": 0,
             "is_provisional": True,
             "evidence_ids": [],
