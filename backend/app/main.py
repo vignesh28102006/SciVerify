@@ -488,7 +488,21 @@ def verify_claim(req: ClaimRequest):
                 explanation = groq_res.get("explanation") or f"[Groq Mode] Consensus: {evidence_cards[0].highlightedSentence}"
 
         if engine_choice == "deberta":
-            xai_payload = claim_verifier.explain(claim, top_evidence)
+            try:
+                xai_payload = claim_verifier.explain(claim, top_evidence)
+            except Exception as e:
+                logger.warning(f"DeBERTa explain failed: {e}. Falling back to perturbation explainer.")
+                xai_raw = xai_explainer.explain(claim, top_evidence, overall_verdict, model_name=verified_by)
+                xai_payload = XAIResponse(
+                    method=xai_raw["method"],
+                    modelExplained=verified_by,
+                    targetVerdict=xai_raw["targetVerdict"],
+                    topFeatures=[XAIFeature(**feat) for feat in xai_raw["topFeatures"]],
+                    rationaleFidelity=xai_raw["rationaleFidelity"],
+                    faithfulnessScore=xai_raw["faithfulnessScore"],
+                    summary=xai_raw["summary"],
+                    limitations=xai_raw["limitations"]
+                )
         else:
             xai_raw = xai_explainer.explain(claim, top_evidence, overall_verdict, model_name=verified_by)
             xai_payload = XAIResponse(
@@ -636,7 +650,21 @@ def verify_claim(req: ClaimRequest):
             explanation = groq_res.get("explanation", f"Verified against external PubMed literature ({pubmed_docs[0]['title']}).")
 
         if engine_choice == "deberta":
-            xai_payload = claim_verifier.explain(claim, top_evidence)
+            try:
+                xai_payload = claim_verifier.explain(claim, top_evidence)
+            except Exception as e:
+                logger.warning(f"DeBERTa explain failed in Path B: {e}. Falling back to perturbation explainer.")
+                xai_raw = xai_explainer.explain(claim, top_evidence, overall_verdict, model_name=verified_by)
+                xai_payload = XAIResponse(
+                    method=xai_raw["method"],
+                    modelExplained=verified_by,
+                    targetVerdict=xai_raw["targetVerdict"],
+                    topFeatures=[XAIFeature(**feat) for feat in xai_raw["topFeatures"]],
+                    rationaleFidelity=xai_raw["rationaleFidelity"],
+                    faithfulnessScore=xai_raw["faithfulnessScore"],
+                    summary=xai_raw["summary"],
+                    limitations=xai_raw["limitations"]
+                )
         else:
             xai_raw = xai_explainer.explain(claim, top_evidence, overall_verdict, model_name=verified_by)
             xai_payload = XAIResponse(
