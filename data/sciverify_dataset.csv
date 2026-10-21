@@ -49,3 +49,4 @@ id,claim,label,evidence
 48,Early antibiotic treatment reduces mortality in sepsis patients.,SUPPORT,Sepsis patients who received antibiotics within one hour of diagnosis had significantly lower mortality rates.
 49,Noise pollution exposure has no effect on cardiovascular health.,CONTRADICT,Long-term exposure to high traffic noise was associated with a significantly elevated risk of cardiovascular events.
 50,Telemedicine consultations are equally effective as in-person visits for all medical specialties.,NOT ENOUGH INFO,The study evaluated telemedicine outcomes only within primary care and did not assess other medical specialties.
+51,Smoking cessation has no effect on lung cancer risk reduction.,CONTRADICT,Quitting smoking halts the accumulation of tobacco-induced genetic damage and leads to a permanent statistically significant reduction in lung cancer incidence compared with persistent smokers.
