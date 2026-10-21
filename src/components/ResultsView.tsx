@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, BookOpen, Sparkles, Cpu, Activity, BarChart2, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, ExternalLink, BookOpen, Sparkles, Cpu, Activity, BarChart2, CheckCircle2, AlertTriangle, Network } from 'lucide-react';
 import type { VerificationResult, EvidenceCard, Verdict } from '../services/mockVerification';
+import { EvidenceKnowledgeGraph } from './EvidenceKnowledgeGraph';
 
 interface ResultsViewProps {
   result: VerificationResult;
@@ -509,9 +510,18 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
                 SECTION_03: RETRIEVED RESEARCH PAPERS
               </h3>
             </div>
-            <span className="text-[10px] font-mono text-slate-500">
-              [INDEX: SIMILARITY]
-            </span>
+            <div className="flex items-center gap-2">
+              <a
+                href="#knowledge-graph-section"
+                className="text-[10px] font-mono text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30 flex items-center gap-1 transition-colors"
+              >
+                <Network className="h-3 w-3" />
+                <span>[TOPOLOGY GRAPH ↓]</span>
+              </a>
+              <span className="text-[10px] font-mono text-slate-500 hidden sm:inline">
+                [INDEX: SIMILARITY]
+              </span>
+            </div>
           </div>
 
           {/* Evidence Cards Stack */}
@@ -718,6 +728,18 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ result, onReset }) => 
         </div>
 
       </div>
+
+      {/* SECTION_04: EVIDENCE VERIFICATION & CONSENSUS TOPOLOGY GRAPH */}
+      {revealStage >= 4 && (
+        <motion.div
+          id="knowledge-graph-section"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <EvidenceKnowledgeGraph result={result} />
+        </motion.div>
+      )}
 
       {/* SECTION_05: MODEL PERFORMANCE & EVALUATION (ALL DEEP LEARNING MODELS) */}
       {revealStage >= 5 && (
